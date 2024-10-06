@@ -13,12 +13,14 @@ import { getImage } from '@/lib/getPosts';
 import { getImageMimeType } from '@/lib/mime-getter';
 import { makeExcerpt } from '@/lib/textFormatter';
 import { HeadMeta } from '@/static/metaType';
+import { ExplainingBanner } from '../UserBanner';
 import CopyToClipboard from './CopyToClipboard';
 
 async function ExImg({ path, alt }: { path: string; alt?: string }) {
   const image64 = await getImage(path);
   const mimeType = getImageMimeType(path);
-  return <img alt={alt} src={`data:${mimeType};base64,${image64}`} />;
+  if (image64 !== '') return <img alt={alt} src={`data:${mimeType};base64,${image64}`} />;
+  else return <ExplainingBanner>画像取得に失敗しました</ExplainingBanner>;
 }
 
 async function ExA({ path, isInner }: { path: string; isInner: boolean }) {

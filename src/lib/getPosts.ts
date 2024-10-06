@@ -128,6 +128,8 @@ export const getImage = cache(async (path: string) => {
     .then((res) => res.json())
     .catch((err) => console.error(err));
 
+  if (!fileJson.git_url) return '';
+
   const imageJson = await fetch(fileJson.git_url, {
     ...getHeaders(),
     ...getNext(3600 * 24),

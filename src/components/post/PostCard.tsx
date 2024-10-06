@@ -71,16 +71,7 @@ export function PostLargeCard({ post }: { post: Post }) {
       <div>
         <Link href={`/post/${post.slug}`}>
           <div className='overflow-hidden rounded-md bg-slate-100 dark:bg-slate-700'>
-            <Image
-              alt={post.data.title}
-              width={1200}
-              height={630}
-              src={
-                post.data.thumbnail
-                  ? `/api/get-thumbnail?path=${encodeURIComponent(post.data.thumbnail)}`
-                  : `/api/ogp-posts/${post.slug}`
-              }
-            />
+            <Image alt={post.data.title} width={1200} height={630} src={`/api/ogp-posts/${post.slug}`} />
           </div>
           <PostDescription post={post} />
         </Link>
