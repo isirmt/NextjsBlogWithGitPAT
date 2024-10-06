@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import TipsCard from '@/components/TipsCard';
 import { ExplainingBanner } from '@/components/UserBanner';
 import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
+import FeedButton from '@/components/post/FeedButton';
 import PostPaging from '@/components/post/PostPaging';
 import { generateMetadataTemplate } from '@/lib/SEO';
 import { getSeries } from '@/lib/getPosts';
@@ -17,11 +18,22 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const slug = decodeURIComponent(params.slug);
   const series = await getContents(slug);
 
-  return generateMetadataTemplate({
-    title: `「${series.meta.name}」シリーズの投稿一覧`,
-    description: `${series.meta.description ? series.meta.description : `「${siteName}」内の「${slug}」シリーズの投稿一覧`}`,
-    url: `/series/${params.slug}`,
-  });
+  return {
+    ...generateMetadataTemplate({
+      title: `「${series.meta.name}」シリーズの投稿一覧`,
+      description: `${series.meta.description ? series.meta.description : `「${siteName}」内の「${slug}」シリーズの投稿一覧`}`,
+      url: `/series/${params.slug}`,
+    }),
+    icons: {
+      other: [
+        {
+          url: `/series/${params.slug}/feed`,
+          rel: 'alternate',
+          type: 'application/atom+xml',
+        },
+      ],
+    },
+  };
 }
 
 export default async function PostListWithTag({ params }: { params: { slug: string } }) {
@@ -42,7 +54,10 @@ export default async function PostListWithTag({ params }: { params: { slug: stri
             <span className='mr-3 rounded-md bg-slate-200 px-1.5 py-1 align-middle text-base transition-colors dark:bg-slate-700'>
               シリーズ
             </span>
-            {series.meta.name}
+            <span>
+              {series.meta.name}
+              <FeedButton url={`/series/${params.slug}/feed`} />
+            </span>
           </span>
         </Title>
         {series.meta.description ? (
