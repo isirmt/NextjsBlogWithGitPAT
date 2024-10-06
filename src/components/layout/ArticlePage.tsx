@@ -1,16 +1,16 @@
 import React, { Suspense } from 'react';
 import '@/styles/post/style.css';
-import TagBanner from '@/components/tag/TagBanner';
+import Link from 'next/link';
 import DateCard from '@/components/post/DateCard';
+import TagBanner from '@/components/tag/TagBanner';
+import { getCommentList } from '@/lib/commentIssueManager';
 import { getSeries } from '@/lib/getPosts';
 import { PostData } from '@/static/postType';
+import LoadingCircle from '../LoadingCircle';
+import { ExplainingBanner } from '../UserBanner';
 import { CommentForm, CommentFormNoPosting } from '../post/CommentForm';
 import { PostMarkdown } from '../post/MarkdownElements';
-import { ExplainingBanner } from '../UserBanner';
-import Link from 'next/link';
 import SeriesCard from '../post/SeriesCard';
-import { getCommentList } from '@/lib/commentIssueManager';
-import LoadingCircle from '../LoadingCircle';
 
 export default async function Article({ data, content, slug }: { data: PostData; content: string; slug?: string }) {
   const series = data.series ? await getSeries(data.series) : undefined;

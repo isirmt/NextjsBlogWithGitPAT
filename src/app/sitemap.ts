@@ -1,7 +1,7 @@
+import { MetadataRoute } from 'next';
 import { getPostsProps, getSeries, getSeriesProps } from '@/lib/getPosts';
 import { getTagsWithLatestDate } from '@/lib/postSorter';
 import { lastModified } from '@/static/constant';
-import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;

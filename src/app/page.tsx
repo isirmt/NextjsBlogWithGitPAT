@@ -1,19 +1,19 @@
-import { getPostsProps } from '@/lib/getPosts';
-import { Main, SectionNoP, Side, Title } from '@/components/layout/PageLayout';
-import TipsCard from '@/components/TipsCard';
-import FavoritePosts from '@/components/post/FavoritePosts';
-import FavoriteTags from '@/components/tag/FavoriteTags';
-import { headerMovName, siteName } from '@/static/constant';
-import SearchBoxWrapper from '@/components/SearchBoxWrapper';
-import { generateMetadataTemplate } from '@/lib/SEO';
 import { Metadata } from 'next';
-import { InnerLinkBlueButton } from '@/components/InnerLinkButton';
-import { PostLargeCard } from '@/components/post/PostCard';
-import { WebSite, WithContext } from 'schema-dts';
-import JsonLd from '@/components/JsonLd';
 import Link from 'next/link';
+import { WebSite, WithContext } from 'schema-dts';
 import InlineVideo from '@/components/InlineVideo';
+import { InnerLinkBlueButton } from '@/components/InnerLinkButton';
+import JsonLd from '@/components/JsonLd';
+import SearchBoxWrapper from '@/components/SearchBoxWrapper';
+import TipsCard from '@/components/TipsCard';
+import { Main, SectionNoP, Side, Title } from '@/components/layout/PageLayout';
+import FavoritePosts from '@/components/post/FavoritePosts';
+import { PostLargeCard } from '@/components/post/PostCard';
 import PostPaging from '@/components/post/PostPaging';
+import FavoriteTags from '@/components/tag/FavoriteTags';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPostsProps } from '@/lib/getPosts';
+import { headerMovName, siteName } from '@/static/constant';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({

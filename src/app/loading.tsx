@@ -1,5 +1,5 @@
-import { Main, Section, Side } from '@/components/layout/PageLayout';
 import LoadingCircle from '@/components/LoadingCircle';
+import { Main, Section, Side } from '@/components/layout/PageLayout';
 
 export default function Loading() {
   return (

@@ -1,7 +1,7 @@
+import Rss from 'rss';
 import { getPostsProps } from '@/lib/getPosts';
 import { siteName } from '@/static/constant';
 import { lastModified } from '@/static/constant';
-import Rss from 'rss';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 1200;

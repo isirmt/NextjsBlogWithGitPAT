@@ -1,10 +1,10 @@
+import { Metadata } from 'next';
 import InlineVideo from '@/components/InlineVideo';
 import { InnerLinkBlueButton } from '@/components/InnerLinkButton';
-import { Main, SectionNoP, Side, Title } from '@/components/layout/PageLayout';
 import TipsCard from '@/components/TipsCard';
+import { Main, SectionNoP, Side, Title } from '@/components/layout/PageLayout';
 import { generateMetadataTemplate } from '@/lib/SEO';
 import { headerMovName } from '@/static/constant';
-import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({

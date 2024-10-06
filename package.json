@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint --ext .ts,.js,.tsx .",
+    "lint:fix": "eslint --ext .ts,.js,.tsx . --fix",
     "fmt": "prettier . --write",
-    "check": "next lint && prettier . --check"
+    "check": "eslint --ext .ts,.js,.tsx . && prettier . --check"
   },
   "dependencies": {
     "@egoist/tailwindcss-icons": "^1.8.1",
@@ -50,6 +51,7 @@
     "@types/rss": "^0.0.32",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^9.1.0",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",

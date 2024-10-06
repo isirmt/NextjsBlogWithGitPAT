@@ -1,10 +1,10 @@
-import TipsCard from '@/components/TipsCard';
-import { getSeriesProps } from '@/lib/getPosts';
-import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import { Metadata } from 'next';
-import { generateMetadataTemplate } from '@/lib/SEO';
-import { siteName } from '@/static/constant';
+import TipsCard from '@/components/TipsCard';
+import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import SeriesCard from '@/components/post/SeriesCard';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getSeriesProps } from '@/lib/getPosts';
+import { siteName } from '@/static/constant';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({

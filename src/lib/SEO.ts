@@ -1,6 +1,6 @@
+import { OpenGraphType } from 'next/dist/lib/metadata/types/opengraph-types';
 import { author, siteDescription, siteName } from '@/static/constant';
 import type { Metadata } from 'next';
-import { OpenGraphType } from 'next/dist/lib/metadata/types/opengraph-types';
 
 interface Props {
   title?: string;

@@ -1,7 +1,7 @@
 'use client';
-import { addFavorite, hasFavorite, removeFavorite } from '@/lib/favTagsManager';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { addFavorite, hasFavorite, removeFavorite } from '@/lib/favTagsManager';
 
 export default function TagBanner({ tag, isSmall = false }: { tag: string; isSmall?: boolean }) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);

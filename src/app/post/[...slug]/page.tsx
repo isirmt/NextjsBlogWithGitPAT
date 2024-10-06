@@ -1,15 +1,15 @@
 import React, { cache } from 'react';
 import '@/styles/post/style.css';
-import { getPost } from '@/lib/getPosts';
-import PostIndex from '@/components/post/PostIndex';
 import { Metadata } from 'next';
-import { generateMetadataTemplate } from '@/lib/SEO';
+import { BlogPosting, WithContext } from 'schema-dts';
+import JsonLd from '@/components/JsonLd';
+import ShareButtons from '@/components/ShareButtons';
 import Article from '@/components/layout/ArticlePage';
 import { Main, SideMDShown } from '@/components/layout/PageLayout';
-import ShareButtons from '@/components/ShareButtons';
-import { BlogPosting, WithContext } from 'schema-dts';
+import PostIndex from '@/components/post/PostIndex';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPost } from '@/lib/getPosts';
 import { author } from '@/static/constant';
-import JsonLd from '@/components/JsonLd';
 
 const getFileContent = cache(async (path: string) => {
   const postPath = `${process.env.GIT_POSTS_DIR!}/${path}.md`;

@@ -1,6 +1,6 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { getImage } from '@/lib/getPosts';
 import { getImageMimeType } from '@/lib/mime-getter';
-import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const targetPath = new URL(req.url).searchParams.get('path');

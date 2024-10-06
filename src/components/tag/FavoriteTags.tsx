@@ -1,8 +1,8 @@
 'use client';
-import { getFavList } from '@/lib/favTagsManager';
-import TagBanner from './TagBanner';
 import { useEffect, useState } from 'react';
+import { getFavList } from '@/lib/favTagsManager';
 import { ExplainingBanner } from '../UserBanner';
+import TagBanner from './TagBanner';
 
 export default function FavoriteTags() {
   const [favoriteTags, setFavoriteTags] = useState<string[]>([]);

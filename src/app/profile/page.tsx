@@ -1,12 +1,12 @@
 import React, { cache } from 'react';
 import '@/styles/post/style.css';
-import { getPost } from '@/lib/getPosts';
-import PostIndex from '@/components/post/PostIndex';
 import { Metadata } from 'next';
-import { generateMetadataTemplate } from '@/lib/SEO';
-import { author, siteName } from '@/static/constant';
 import Article from '@/components/layout/ArticlePage';
 import { Main, SideMDShown } from '@/components/layout/PageLayout';
+import PostIndex from '@/components/post/PostIndex';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPost } from '@/lib/getPosts';
+import { author, siteName } from '@/static/constant';
 
 const getFileContent = cache(async () => {
   const postPath = `${process.env.GIT_PROFILE_PATH!}`;

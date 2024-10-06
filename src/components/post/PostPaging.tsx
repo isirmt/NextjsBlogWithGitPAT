@@ -1,16 +1,16 @@
 'use client';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { A11y } from 'swiper/modules';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { Post } from '@/static/postType';
 import { PostCard, PostLargeCard } from './PostCard';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
-import { createJSONStorage, persist } from 'zustand/middleware';
-import { create } from 'zustand';
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/a11y';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { A11y } from 'swiper/modules';
 
 interface ShowingOptionState {
   isLarge: boolean;

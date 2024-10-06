@@ -1,14 +1,14 @@
 import '../styles/globals.css';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import Menu from '@/components/layout/Menu';
-import { GoogleTagManager } from '@next/third-parties/google';
-import { preloadTheme } from '@/lib/themeManager';
-import NextTopLoader from 'nextjs-toploader';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Analytics } from '@vercel/analytics/react';
-import { notoSansJp } from '@/lib/font';
 import * as React from 'react';
+import { GoogleTagManager } from '@next/third-parties/google';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import NextTopLoader from 'nextjs-toploader';
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
+import Menu from '@/components/layout/Menu';
+import { notoSansJp } from '@/lib/font';
+import { preloadTheme } from '@/lib/themeManager';
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

@@ -1,10 +1,10 @@
 'use client';
 
-import { getFavList } from '@/lib/favTagsManager';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { getFavList } from '@/lib/favTagsManager';
 import { Post } from '@/static/postType';
 import TipsCard from '../TipsCard';
-import Link from 'next/link';
 import PostPaging from './PostPaging';
 
 export default function FavoritePosts({ posts }: { posts: Post[] }) {

@@ -1,12 +1,12 @@
 'use client';
+import { useCallback, useEffect, useState } from 'react';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { Comment } from '@/static/issueType';
+import LoadingCircle from '../LoadingCircle';
+import { ExplainingBanner } from '../UserBanner';
+import PostingForm from './CommentPostingBox';
 import DateCard from './DateCard';
 import { CommentMarkdown } from './MarkdownElements';
-import PostingForm from './CommentPostingBox';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import { ExplainingBanner } from '../UserBanner';
-import { useCallback, useEffect, useState } from 'react';
-import LoadingCircle from '../LoadingCircle';
 
 function CommentsView({ comments }: { comments: Comment[] }) {
   return (

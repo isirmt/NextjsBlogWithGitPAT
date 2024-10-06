@@ -1,10 +1,10 @@
+import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { makeExcerpt } from '@/lib/textFormatter';
+import { Post } from '@/static/postType';
 import TagBanner from '../tag/TagBanner';
 import DateCard from './DateCard';
-import { Post } from '@/static/postType';
-import { makeExcerpt } from '@/lib/textFormatter';
-import Image from 'next/image';
-import React from 'react';
 
 function PostDescription({ post }: { post: Post }) {
   return (

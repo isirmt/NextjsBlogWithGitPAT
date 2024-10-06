@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link';
 import { getHeaders, getNext } from '@/lib/fetchingFunc';
 import { author, enableShowGitHubProfile, enableShowXProfile } from '@/static/constant';
-import Link from 'next/link';
 
 export default async function Footer() {
   const githubProfile = await fetch(`https://api.github.com/user`, {

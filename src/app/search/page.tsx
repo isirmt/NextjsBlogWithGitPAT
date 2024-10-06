@@ -1,11 +1,11 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import SearchResult from '@/components/SearchResults';
 import TipsCard from '@/components/TipsCard';
-import { getPostsProps } from '@/lib/getPosts';
 import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
 import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPostsProps } from '@/lib/getPosts';
 import { siteName } from '@/static/constant';
-import { notFound } from 'next/navigation';
 
 export async function generateMetadata({
   searchParams,

@@ -1,12 +1,12 @@
-import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
-import TipsCard from '@/components/TipsCard';
-import { getPostsProps } from '@/lib/getPosts';
-import { generateMetadataTemplate } from '@/lib/SEO';
-import { siteName } from '@/static/constant';
 import { Metadata } from 'next';
+import TipsCard from '@/components/TipsCard';
+import { ExplainingBanner } from '@/components/UserBanner';
+import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import FeedButton from '@/components/post/FeedButton';
 import PostPaging from '@/components/post/PostPaging';
-import { ExplainingBanner } from '@/components/UserBanner';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPostsProps } from '@/lib/getPosts';
+import { siteName } from '@/static/constant';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({

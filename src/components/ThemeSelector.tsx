@@ -1,6 +1,6 @@
 'use client';
-import { getTheme, preloadTheme, selectDarkTheme, selectLightTheme, selectOSPreferenceTheme } from '@/lib/themeManager';
 import { useEffect, useState } from 'react';
+import { getTheme, preloadTheme, selectDarkTheme, selectLightTheme, selectOSPreferenceTheme } from '@/lib/themeManager';
 
 type ThemeName = 'light' | 'dark' | 'os';
 

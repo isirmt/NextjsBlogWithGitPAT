@@ -1,5 +1,5 @@
-import { getCommentList } from '@/lib/commentIssueManager';
 import { NextRequest, NextResponse } from 'next/server';
+import { getCommentList } from '@/lib/commentIssueManager';
 
 export async function GET(req: NextRequest, context: { params: { slug: string[] } }) {
   const slug = decodeURIComponent(context.params.slug.join('/'));

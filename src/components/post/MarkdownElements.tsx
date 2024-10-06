@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { getImage } from '@/lib/getPosts';
 import { ClassAttributes, HTMLAttributes } from 'react';
+import * as React from 'react';
 import ReactMarkdown, { Components, ExtraProps } from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -9,11 +9,11 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import CopyToClipboard from './CopyToClipboard';
-import { HeadMeta } from '@/static/metaType';
-import * as React from 'react';
-import { makeExcerpt } from '@/lib/textFormatter';
+import { getImage } from '@/lib/getPosts';
 import { getImageMimeType } from '@/lib/mime-getter';
+import { makeExcerpt } from '@/lib/textFormatter';
+import { HeadMeta } from '@/static/metaType';
+import CopyToClipboard from './CopyToClipboard';
 
 async function ExImg({ path, alt }: { path: string; alt?: string }) {
   const image64 = await getImage(path);

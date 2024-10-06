@@ -1,13 +1,13 @@
-import SubscribeTagButton from '@/components/tag/SubscribeTagButton';
-import TipsCard from '@/components/TipsCard';
-import { getPostsProps } from '@/lib/getPosts';
-import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import { Metadata } from 'next';
-import { generateMetadataTemplate } from '@/lib/SEO';
-import { siteName } from '@/static/constant';
+import TipsCard from '@/components/TipsCard';
+import { ExplainingBanner } from '@/components/UserBanner';
+import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import FeedButton from '@/components/post/FeedButton';
 import PostPaging from '@/components/post/PostPaging';
-import { ExplainingBanner } from '@/components/UserBanner';
+import SubscribeTagButton from '@/components/tag/SubscribeTagButton';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPostsProps } from '@/lib/getPosts';
+import { siteName } from '@/static/constant';
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug);

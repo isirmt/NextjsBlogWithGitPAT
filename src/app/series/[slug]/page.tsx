@@ -1,13 +1,13 @@
-import TipsCard from '@/components/TipsCard';
-import { getSeries } from '@/lib/getPosts';
-import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
-import { Metadata } from 'next';
-import { generateMetadataTemplate } from '@/lib/SEO';
-import { siteName } from '@/static/constant';
 import { cache } from 'react';
 import React from 'react';
-import PostPaging from '@/components/post/PostPaging';
+import { Metadata } from 'next';
+import TipsCard from '@/components/TipsCard';
 import { ExplainingBanner } from '@/components/UserBanner';
+import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
+import PostPaging from '@/components/post/PostPaging';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getSeries } from '@/lib/getPosts';
+import { siteName } from '@/static/constant';
 
 const getContents = cache(async (slug: string) => {
   return getSeries(slug);

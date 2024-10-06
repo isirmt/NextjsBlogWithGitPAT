@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { CommentMarkdown } from './MarkdownElements';
+import * as React from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { GenerateNotificationBanner, ExplainingBanner } from '../UserBanner';
-import * as React from 'react';
+import { CommentMarkdown } from './MarkdownElements';
 
 const buttonClassName =
   'transition-colors h-12 text-center items-center justify-center flex px-3 rounded-t-lg border-t border-x border-blue-400 dark:border-blue-600';

@@ -1,11 +1,11 @@
-import matter from 'gray-matter';
 import { cache } from 'react';
-import { MarkdownToPlainText } from './markdownConverter';
-import type { Post, PostData, SeriesData } from '@/static/postType';
-import { comparePosts, compareSeriesPosts } from './postSorter';
-import { makeExcerpt } from './textFormatter';
+import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
 import { fetchAllData, getHeaders, getNext } from './fetchingFunc';
+import { MarkdownToPlainText } from './markdownConverter';
+import { comparePosts, compareSeriesPosts } from './postSorter';
+import { makeExcerpt } from './textFormatter';
+import type { Post, PostData, SeriesData } from '@/static/postType';
 
 const gitContentPath = `https://api.github.com/repos/${process.env.GIT_USERNAME!}/${process.env.GIT_REPO!}/contents`;
 

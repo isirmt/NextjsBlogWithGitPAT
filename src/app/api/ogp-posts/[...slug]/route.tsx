@@ -1,8 +1,8 @@
-import { NextRequest } from 'next/server';
-import { ImageResponse } from 'next/og';
-import { getPost } from '@/lib/getPosts';
-import path from 'path';
 import { promises as fs } from 'fs';
+import path from 'path';
+import { ImageResponse } from 'next/og';
+import { NextRequest } from 'next/server';
+import { getPost } from '@/lib/getPosts';
 
 export async function GET(req: NextRequest, context: { params: { slug: string[] } }) {
   const slug = decodeURIComponent(context.params.slug.join('/'));

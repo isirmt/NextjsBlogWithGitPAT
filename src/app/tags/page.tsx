@@ -1,12 +1,12 @@
-import TagBanner from '@/components/tag/TagBanner';
-import TipsCard from '@/components/TipsCard';
-import { getPostsProps } from '@/lib/getPosts';
-import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import { Metadata } from 'next';
-import { generateMetadataTemplate } from '@/lib/SEO';
-import { siteName } from '@/static/constant';
-import { getTags } from '@/lib/postSorter';
+import TipsCard from '@/components/TipsCard';
+import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import FavoriteTags from '@/components/tag/FavoriteTags';
+import TagBanner from '@/components/tag/TagBanner';
+import { generateMetadataTemplate } from '@/lib/SEO';
+import { getPostsProps } from '@/lib/getPosts';
+import { getTags } from '@/lib/postSorter';
+import { siteName } from '@/static/constant';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({

@@ -1,7 +1,7 @@
-import { getSeries } from '@/lib/getPosts';
 import Link from 'next/link';
-import { PostCard } from './PostCard';
+import { getSeries } from '@/lib/getPosts';
 import { ExplainingBanner } from '../UserBanner';
+import { PostCard } from './PostCard';
 
 export default async function SeriesCard({ slug, index }: { slug: string; index?: number }) {
   const { meta, posts } = await getSeries(slug);
