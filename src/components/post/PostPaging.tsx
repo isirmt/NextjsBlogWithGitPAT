@@ -105,7 +105,7 @@ export default function PostPaging({
         <div className='break-all'>{posts.length}&nbsp;件</div>
         {maxPage != 1 ? (
           <div className='flex select-none items-center'>
-            <span className='i-tabler-swipe mr-0.5 size-4 bg-gray-700 transition-colors dark:bg-slate-400' />
+            <span className='i-tabler-hand-move mr-0.5 size-4 bg-gray-700 transition-colors dark:bg-slate-400' />
             <span className='break-all text-xs text-gray-700 transition-colors dark:text-slate-400'>
               スワイプ可
               <span />
