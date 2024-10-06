@@ -54,7 +54,7 @@ export default async function Article({ data, content, slug }: { data: PostData;
           ) : issue.locked ? (
             <CommentFormNoPosting comments={issue.comments} />
           ) : (
-            <CommentForm comments={issue.comments} slug={slug} />
+            <CommentForm initialComments={issue.comments} slug={slug} />
           )
         ) : (
           <></>
