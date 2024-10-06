@@ -1,4 +1,4 @@
-import { getPostsProps } from '@/lib/getPosts';
+import { getPostsProps, getSeries, getSeriesProps } from '@/lib/getPosts';
 import { getTagsWithLatestDate } from '@/lib/postSorter';
 import { lastModified } from '@/static/constant';
 import { MetadataRoute } from 'next';
@@ -10,6 +10,7 @@ const staticPaths = ['/post', '/profile', '/series', '/tags'];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getPostsProps();
+  const seriesNames = await getSeriesProps();
   const tagsWithDate = getTagsWithLatestDate(posts);
 
   const baseURL = process.env.NEXT_PUBLIC_URL!;
@@ -29,6 +30,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const dynamicPages: MetadataRoute.Sitemap = [];
+
+  for (const series of seriesNames) {
+    const { posts } = await getSeries(series);
+    dynamicPages.push({
+      url: baseURL + '/series/' + series,
+      lastModified: posts[0].data.date ? new Date(posts[0].data.date) : lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
+
+  posts.forEach((post) => {
+    dynamicPages.push({
+      url: baseURL + '/post/' + post.slug,
+      lastModified: post.data.date ? new Date(post.data.date) : lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.8,
+    });
+  });
 
   tagsWithDate.forEach((tagWithDate) => {
     dynamicPages.push({
