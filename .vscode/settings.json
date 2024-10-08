@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "chartjs",
     "fname",
     "frontmatter",
     "getposts",
@@ -11,6 +12,7 @@
     "Noto",
     "opengraph",
     "recaptcha",
+    "registerables",
     "rehype",
     "swiper",
     "tabler",
