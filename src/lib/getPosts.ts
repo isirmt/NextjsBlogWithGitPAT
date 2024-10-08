@@ -47,12 +47,13 @@ export const getSeriesProps = cache(async () => {
 });
 
 async function createPostFromFile(item: any, dir: string): Promise<Post | null> {
-  const { data, excerpt } = await getPostContent(`${dir}/${item.name}`);
+  const { data, excerpt, content } = await getPostContent(`${dir}/${item.name}`);
   if (data.title) {
     return {
       slug: item.path.replace(`${process.env.GIT_POSTS_DIR}/`, '').replace('.md', ''),
       data,
       excerpt,
+      content,
     };
   }
   return null;

@@ -110,6 +110,12 @@ export default async function Footer() {
             )}
           </div>
         </div>
+        <p className='mb-4'>
+          <small className='mr-2'>(管理者用)</small>
+          <Link href='/dashboard' className='underline'>
+            ダッシュボード
+          </Link>
+        </p>
         <small>&copy; {author.name}</small>
         <small>
           Build with&nbsp;
