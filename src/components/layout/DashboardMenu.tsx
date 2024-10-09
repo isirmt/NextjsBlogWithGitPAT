@@ -1,9 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
+
+function HamburgerButton({ func, state }: { func: MouseEventHandler<HTMLButtonElement>; state: boolean }) {
+  return (
+    <div className={`fixed left-0 top-0 z-50 flex size-14 items-center justify-center transition-colors md:hidden`}>
+      <button
+        className='flex size-10 items-center justify-center rounded-full bg-slate-200 transition-colors hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700'
+        onClick={func}
+        aria-label='Toggle Menu'
+      >
+        <span className={`${state ? 'i-tabler-x' : 'i-tabler-menu-2'} size-6`} />
+      </button>
+    </div>
+  );
+}
 
 export default function DashboardMenu() {
   const [session, setSession] = useState<Session | null>(null);
@@ -27,13 +41,7 @@ export default function DashboardMenu() {
   if (!session) {
     return (
       <>
-        <div
-          className={`fixed left-0 top-0 z-50 flex h-14 w-12 items-center justify-center rounded-md transition-colors ${isOpen ? 'transparent' : 'bg-gray-100'} md:hidden`}
-        >
-          <button onClick={toggleMenu} aria-label='Toggle Menu'>
-            <span className={`i-tabler-menu-2 size-6`} />
-          </button>
-        </div>
+        <HamburgerButton state={isOpen} func={toggleMenu} />
         <aside
           className={`fixed left-0 top-0 h-full w-64 transform select-none border-r-2 border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800 ${isOpen ? 'translate-x-0' : '-translate-x-full'} z-40 transition-transform md:relative md:z-0 md:h-auto md:translate-x-0`}
         />
@@ -43,16 +51,7 @@ export default function DashboardMenu() {
 
   return (
     <>
-      <div className={`fixed left-0 top-0 z-50 flex size-14 items-center justify-center transition-colors md:hidden`}>
-        <button
-          className='flex size-10 items-center justify-center rounded-full bg-slate-200 transition-colors hover:bg-slate-300'
-          onClick={toggleMenu}
-          aria-label='Toggle Menu'
-        >
-          <span className={`${isOpen ? 'i-tabler-x' : 'i-tabler-menu-2'} size-6`} />
-        </button>
-      </div>
-
+      <HamburgerButton state={isOpen} func={toggleMenu} />
       <aside
         className={`fixed left-0 top-0 h-full w-64 transform select-none border-r-2 border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800 ${isOpen ? 'translate-x-0' : '-translate-x-full'} z-40 transition-transform md:relative md:z-0 md:h-auto md:translate-x-0`}
       >
