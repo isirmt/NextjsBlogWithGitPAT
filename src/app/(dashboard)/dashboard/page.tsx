@@ -3,7 +3,7 @@ import SessionButton from '@/components/SessionButton';
 import ImagesBarChart from '@/components/chart/ImagesBarChart';
 import PostsBarChart from '@/components/chart/PostsBarChart';
 import TagPieChart from '@/components/chart/TagPieChart';
-import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
+import { Title } from '@/components/layout/PageLayout';
 import { auth, signIn } from '@/lib/auth';
 import { getHeaders, getNext } from '@/lib/fetchingFunc';
 import { getPostsProps } from '@/lib/getPosts';
@@ -13,24 +13,20 @@ export default async function Dashboard() {
   if (!session) {
     await signIn('GitHub');
     return (
-      <Main>
-        <Side></Side>
-        <Section>
-          <Title>要ログイン</Title>
-        </Section>
-      </Main>
+      <main className='p-4'>
+        <Title>ダッシュボード</Title>
+        <div>ログインが必要です。</div>
+        <SessionButton />
+      </main>
     );
   }
 
   if (session.user?.id !== process.env.GIT_USERNAME!) {
     return (
-      <Main>
-        <Side></Side>
-        <Section>
-          <Title>管理者のみアクセス可能です！</Title>
-          <SessionButton />
-        </Section>
-      </Main>
+      <main className='p-4'>
+        <Title>ダッシュボード</Title>
+        <div>現在、管理者のみが機能を利用可能です。</div>
+      </main>
     );
   }
 
