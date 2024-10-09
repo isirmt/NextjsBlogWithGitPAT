@@ -25,16 +25,31 @@ export default function DashboardMenu() {
   };
 
   if (!session) {
-    return <div className='w-64 select-none border-r-2 border-slate-200 bg-slate-50' />;
+    return (
+      <>
+        <div
+          className={`fixed left-0 top-0 z-50 flex h-14 w-12 items-center justify-center rounded-md transition-colors ${isOpen ? 'transparent' : 'bg-gray-100'} md:hidden`}
+        >
+          <button onClick={toggleMenu} aria-label='Toggle Menu'>
+            <span className={`i-tabler-menu-2 size-6`} />
+          </button>
+        </div>
+        <aside
+          className={`fixed left-0 top-0 h-full w-64 transform select-none border-r-2 border-slate-200 bg-slate-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} z-40 transition-transform md:relative md:z-0 md:h-auto md:translate-x-0`}
+        />
+      </>
+    );
   }
 
   return (
     <>
-      <div
-        className={`fixed left-0 top-0 z-50 flex h-14 w-12 items-center justify-center rounded-md transition-colors ${isOpen ? 'transparent' : 'bg-gray-100'} md:hidden`}
-      >
-        <button onClick={toggleMenu} aria-label='Toggle Menu'>
-          <span className={`i-tabler-menu-2 size-6`} />
+      <div className={`fixed left-0 top-0 z-50 flex size-14 items-center justify-center transition-colors md:hidden`}>
+        <button
+          className='flex size-10 items-center justify-center rounded-full bg-slate-200 transition-colors hover:bg-slate-300'
+          onClick={toggleMenu}
+          aria-label='Toggle Menu'
+        >
+          <span className={`${isOpen ? 'i-tabler-x' : 'i-tabler-menu-2'} size-6`} />
         </button>
       </div>
 
@@ -46,7 +61,7 @@ export default function DashboardMenu() {
             <p>リンク一覧</p>
             <ul className='my-2 flex flex-col gap-2'>
               <li>
-                <Link href='/dashboard'>
+                <Link href='/dashboard' onClick={() => setIsOpen(false)}>
                   <div className='rounded-sm bg-transparent px-2 py-1 text-lg transition-colors hover:bg-slate-200'>
                     <span className='i-tabler-home mr-1 translate-y-0.5' />
                     ホーム
@@ -56,13 +71,13 @@ export default function DashboardMenu() {
             </ul>
           </div>
           <div className='absolute bottom-0 flex w-full flex-col items-center bg-slate-100'>
-            <div className='flex w-full items-center gap-2 bg-slate-200 px-4 py-2'>
+            <div className='flex w-full items-center gap-2 rounded-t-lg bg-slate-200 px-4 py-2'>
               {session.user?.image ? (
                 <img alt='user-icon' className='size-10 rounded-full' src={session.user?.image} />
               ) : (
                 <></>
               )}
-              <span>{session.user?.id} でログイン中</span>
+              <span>{session.user?.id}</span>
             </div>
             <button
               onClick={() => signOut()}
