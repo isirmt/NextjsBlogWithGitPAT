@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { Session } from 'next-auth';
 import { DashboardItem } from '@/components/DashboardItem';
 import SessionButton from '@/components/SessionButton';
@@ -5,9 +6,19 @@ import ImagesBarChart from '@/components/chart/ImagesBarChart';
 import PostsBarChart from '@/components/chart/PostsBarChart';
 import TagPieChart from '@/components/chart/TagPieChart';
 import { Title } from '@/components/layout/PageLayout';
+import { generateMetadataTemplate } from '@/lib/SEO';
 import { auth, signIn } from '@/lib/auth';
 import { getHeaders, getNext } from '@/lib/fetchingFunc';
 import { getPostsProps } from '@/lib/getPosts';
+import { siteName } from '@/static/constant';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generateMetadataTemplate({
+    title: `ダッシュボード`,
+    description: `「${siteName}」のダッシュボード`,
+    url: `/dashboard`,
+  });
+}
 
 export default async function Dashboard() {
   const session: Session | null = await auth();
