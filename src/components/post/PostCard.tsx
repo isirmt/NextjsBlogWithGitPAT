@@ -22,9 +22,9 @@ function PostDescription({ post, isPending }: { post: Post; isPending: boolean }
           ) : (
             <></>
           )}
-          <span className='transition-colors dark:text-white'>{post.data.title}</span>
+          <span className='break-all transition-colors dark:text-white'>{post.data.title}</span>
         </p>
-        <p className='mb-2 px-4 text-xs leading-3'>{makeExcerpt(post.excerpt, 64)}</p>
+        <p className='mb-2 break-all px-4 text-xs leading-3'>{makeExcerpt(post.excerpt, 64)}</p>
       </div>
       <div
         className={`${isPending ? 'opacity-100' : 'opacity-0'} absolute z-50 size-full bg-white transition-all dark:bg-slate-800`}
