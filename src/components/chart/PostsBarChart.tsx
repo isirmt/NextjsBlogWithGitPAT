@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Chart, ChartData, registerables } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { GetImagesFromMarkdown } from '@/lib/markdownConverter';
 import { Post } from '@/static/postType';
 
 export default function PostsBarChart({ posts }: { posts: Post[] }) {
@@ -22,10 +21,7 @@ export default function PostsBarChart({ posts }: { posts: Post[] }) {
     const postMonth = postDate.getMonth();
 
     if (postYear === selectedYear) {
-      const imageCount = GetImagesFromMarkdown(post.content).length;
-      const thumbnailCount = post.data.thumbnail ? 1 : 0;
-
-      postsByMonth[postMonth] += imageCount + thumbnailCount;
+      postsByMonth[postMonth]++;
     }
   });
 
