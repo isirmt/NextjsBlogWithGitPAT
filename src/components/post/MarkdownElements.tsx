@@ -135,7 +135,9 @@ const Pre = ({ children, ...props }: ClassAttributes<HTMLPreElement> & HTMLAttri
       <SyntaxHighlighter language={language} style={atomOneDark}>
         {String(code).replace(/\n$/, '')}
       </SyntaxHighlighter>
-      <CopyToClipboard text={String(code).replace(/\n$/, '')} />
+      <div className='sticky bottom-2 flex'>
+        <CopyToClipboard text={String(code).replace(/\n$/, '')} />
+      </div>
     </div>
   );
 };
