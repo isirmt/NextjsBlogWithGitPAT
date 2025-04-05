@@ -125,7 +125,7 @@ export default async function Footer() {
             rel='noopener noreferrer'
             href='https://github.com/isirmt/NextjsBlogWithGitPAT'
           >
-            ブログもち
+            NextjsBlogWithGitPAT
           </Link>
           &nbsp; (
           {baseRepoCommitIsPresenting ? (
