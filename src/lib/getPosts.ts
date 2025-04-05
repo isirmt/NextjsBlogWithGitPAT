@@ -29,7 +29,7 @@ const getPostContent = cache(async (path: string): Promise<{ data: PostData; con
   const outputData = pathParts.length > 2 ? { ...data, series: pathParts[1] } : data;
 
   const plainText = await MarkdownToPlainText(content);
-  const excerpt = makeExcerpt(plainText, 128);
+  const excerpt = makeExcerpt(plainText, 200);
 
   return {
     data: outputData as PostData,
