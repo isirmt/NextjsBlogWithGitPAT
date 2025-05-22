@@ -1,10 +1,12 @@
 'use client';
+import { useCallback, useEffect, useState } from 'react';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import { Comment } from '@/static/issueType';
+import LoadingCircle from '../LoadingCircle';
+import { ExplainingBanner } from '../UserBanner';
+import PostingForm from './CommentPostingBox';
 import DateCard from './DateCard';
 import { CommentMarkdown } from './MarkdownElements';
-import PostingForm from './CommentPostingBox';
-import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
-import { ExplainingBanner } from '../UserBanner';
 
 function CommentsView({ comments }: { comments: Comment[] }) {
   return (
@@ -25,7 +27,34 @@ function CommentsView({ comments }: { comments: Comment[] }) {
   );
 }
 
-export function CommentForm({ comments, slug }: { comments: Comment[]; slug: string }) {
+export function CommentForm({ initialComments, slug }: { initialComments: Comment[]; slug: string }) {
+  const [comments, setComments] = useState<Comment[]>(initialComments);
+  const [loading, setLoading] = useState(false);
+
+  const fetchComments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/comments/${slug}`);
+      if (res.ok) {
+        const issue = await res.json();
+        if (issue && issue.comments) {
+          setComments(issue.comments);
+        }
+      } else {
+        console.error(`Failed to fetch comments: ${res.status}`);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    const interval = setInterval(fetchComments, 20000);
+    return () => clearInterval(interval);
+  }, [fetchComments]);
+
   return (
     <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!} language='ja'>
       <section className='mt-10 border-t pt-5'>
@@ -35,6 +64,25 @@ export function CommentForm({ comments, slug }: { comments: Comment[]; slug: str
         >
           <b>コメント</b>
         </h2>
+        <div className='flex items-center justify-end'>
+          <div className='flex select-none items-center gap-2'>
+            <div className='flex items-center'>
+              <span title='20秒毎' className='text-sm text-gray-700 dark:text-slate-400'>
+                自動更新
+              </span>
+              <div className='scale-50 opacity-25'>
+                <LoadingCircle />
+              </div>
+            </div>
+            <button
+              onClick={fetchComments}
+              className={`px-3 py-1 transition-colors ${loading ? 'bg-gray-400 text-gray-600' : 'bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500'} rounded-md`}
+              disabled={loading}
+            >
+              更新
+            </button>
+          </div>
+        </div>
         <CommentsView comments={comments} />
         <PostingForm slug={slug} />
       </section>

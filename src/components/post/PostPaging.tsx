@@ -1,10 +1,16 @@
 'use client';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { A11y } from 'swiper/modules';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { Post } from '@/static/postType';
 import { PostCard, PostLargeCard } from './PostCard';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
-import { createJSONStorage, persist } from 'zustand/middleware';
-import { create } from 'zustand';
+import 'swiper/css';
+import 'swiper/css/a11y';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 interface ShowingOptionState {
   isLarge: boolean;
@@ -62,10 +68,10 @@ export default function PostPaging({
     const p = useRouting ? searchParams.get(customParam) : null;
     return useRouting ? (p ? Number(p) : 1) : 1;
   });
+  const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
   const isLargePostCard = useShowingOptionStore((state) => state.isLarge);
   const setIsLargePostCard = useShowingOptionStore((state) => state.setIsLarge);
 
-  const startIndex = postsPerPage * (page - 1);
   const maxPage = Math.max(Math.ceil(posts.length / postsPerPage), 1);
 
   const linkingStartPage = Math.max(page - linkingWidth, 1);
@@ -92,14 +98,23 @@ export default function PostPaging({
     }
   }, [maxPage, page, useRouting, updatePage]);
 
-  const displayingPosts = posts.slice(startIndex, startIndex + postsPerPage);
-
   return (
     <div className='block'>
       <div className='mb-2 flex items-center justify-between'>
         {/* ナビゲーション */}
-        <div>{posts.length}&nbsp;件</div>
-        <div className='flex items-center gap-2'>
+        <div className='break-all'>{posts.length}&nbsp;件</div>
+        {maxPage != 1 ? (
+          <div className='flex select-none items-center'>
+            <span className='i-tabler-hand-move mr-0.5 size-4 bg-gray-700 transition-colors dark:bg-slate-400' />
+            <span className='break-all text-xs text-gray-700 transition-colors dark:text-slate-400'>
+              スワイプ可
+              <span />
+            </span>
+          </div>
+        ) : (
+          <></>
+        )}
+        <div className='flex flex-shrink-0 items-center gap-2'>
           <span className='select-none text-sm'>レイアウト</span>
           <div className='relative overflow-hidden rounded-md border border-slate-200 transition-colors dark:border-slate-600'>
             <button
@@ -126,20 +141,42 @@ export default function PostPaging({
           </div>
         </div>
       </div>
-      <div className='mb-2 flex flex-col gap-y-3'>
-        {displayingPosts.map((post, i) => (
-          <div key={i} className={useIndex ? 'flex items-stretch gap-1' : ''}>
-            {useIndex && (
-              <div className='hidden w-10 shrink-0 select-none items-center justify-center overflow-hidden break-all rounded-sm bg-gray-100 px-0.5 text-center text-lg font-bold text-gray-700 dark:bg-slate-700 dark:text-slate-400 lg:flex'>
-                {startIndex + i + 1}
+      <Swiper
+        autoHeight
+        modules={[A11y]}
+        spaceBetween={50}
+        slidesPerView={1}
+        onSwiper={setSwiperInstance}
+        onSlideChange={(swiper) => {
+          const newPage = swiper.activeIndex + 1;
+          setPage(newPage);
+          if (useRouting) updatePage(newPage);
+        }}
+        initialSlide={page - 1}
+      >
+        {Array.from({ length: maxPage }, (_, i) => {
+          const startIndex = i * postsPerPage;
+          const displayingPosts = posts.slice(startIndex, startIndex + postsPerPage);
+          return (
+            <SwiperSlide key={i}>
+              <div className='mb-2 flex flex-col gap-y-3'>
+                {displayingPosts.map((post, id) => (
+                  <div key={id} className={useIndex ? 'flex items-stretch gap-1' : ''}>
+                    {useIndex && (
+                      <div className='hidden w-10 shrink-0 select-none items-center justify-center overflow-hidden break-all rounded-sm bg-gray-100 px-0.5 text-center text-lg font-bold text-gray-700 dark:bg-slate-700 dark:text-slate-400 lg:flex'>
+                        {startIndex + id + 1}
+                      </div>
+                    )}
+                    <div className={useIndex ? 'flex flex-grow' : ''}>
+                      {isLargePostCard ? <PostLargeCard post={post} /> : <PostCard post={post} />}
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-            <div className={useIndex ? 'flex flex-grow' : ''}>
-              {isLargePostCard ? <PostLargeCard post={post} /> : <PostCard post={post} />}
-            </div>
-          </div>
-        ))}
-      </div>
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
       <div
         className={`${maxPage === 1 && hideOnePagingButton ? 'hidden' : 'block'} sticky bottom-0 z-30 border-t bg-white pb-2.5 pt-1.5 dark:border-slate-600 dark:bg-slate-800`}
       >
@@ -153,6 +190,7 @@ export default function PostPaging({
               const nextPage = page - 1 <= 0 ? maxPage : page - 1;
               if (useRouting) updatePage(nextPage);
               setPage(nextPage);
+              swiperInstance?.slideTo(nextPage - 1);
             }}
           />
           <div className='flex gap-1'>
@@ -166,6 +204,7 @@ export default function PostPaging({
                   const nextPage = item;
                   if (useRouting) updatePage(nextPage);
                   setPage(nextPage);
+                  swiperInstance?.slideTo(nextPage - 1);
                 }}
               ></button>
             ))}
@@ -178,6 +217,7 @@ export default function PostPaging({
               const nextPage = page + 1 > maxPage ? 1 : page + 1;
               if (useRouting) updatePage(nextPage);
               setPage(nextPage);
+              swiperInstance?.slideTo(nextPage - 1);
             }}
           />
         </div>

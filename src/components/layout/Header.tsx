@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import SearchBoxWrapper from '../SearchBoxWrapper';
 import { siteName } from '@/static/constant';
+import SearchBoxWrapper from '../SearchBoxWrapper';
 import ThemeSelector from '../ThemeSelector';
 
 export default function Header() {

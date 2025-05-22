@@ -1,3 +1,4 @@
+
 export const siteName = 'Mac020k ブログ';
 export const siteDescription = '「Mac020k ブログ」は';
 export const author = {

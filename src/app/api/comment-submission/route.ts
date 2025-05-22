@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { LRUCache } from 'lru-cache';
+import { NextRequest, NextResponse } from 'next/server';
 import { fetchAllData } from '@/lib/fetchingFunc';
 
 const rateLimit = new LRUCache<string, number>({

@@ -1,5 +1,5 @@
-import { list } from '@vercel/blob';
 import { Suspense } from 'react';
+import { list } from '@vercel/blob';
 
 export default async function InlineVideo({ fileName }: { fileName: string }) {
   try {

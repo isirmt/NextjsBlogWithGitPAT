@@ -1,7 +1,7 @@
-import { Post } from '@/static/postType';
-import TagBanner from './tag/TagBanner';
 import { getTags } from '@/lib/postSorter';
+import { Post } from '@/static/postType';
 import PostPaging from './post/PostPaging';
+import TagBanner from './tag/TagBanner';
 
 export default function SearchResult({ posts, keywords }: { posts: Post[]; keywords: string[] }) {
   const tags = getTags(posts);

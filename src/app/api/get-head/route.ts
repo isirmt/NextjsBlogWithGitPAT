@@ -1,5 +1,5 @@
-import { NextRequest } from 'next/server';
 import { JSDOM } from 'jsdom';
+import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const targetURL = new URL(req.url).searchParams.get('url');

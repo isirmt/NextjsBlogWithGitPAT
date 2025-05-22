@@ -1,6 +1,6 @@
 'use client';
-import Link from 'next/link';
 import { useCallback } from 'react';
+import Link from 'next/link';
 
 function replaceToFullWidth(str: string) {
   return str.replace(/[#$]/g, (match) => {

@@ -5,7 +5,7 @@ export function getFavList() {
   return favStorage ? (JSON.parse(favStorage) as string[]) : [];
 }
 
-function saveFavList(favorites: string[]) {
+export function saveFavList(favorites: string[]) {
   const savingText = JSON.stringify(favorites);
   localStorage.setItem(keyName, savingText);
 }

@@ -6,6 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: [`${process.env.NEXT_PUBLIC_URL}/sitemap.xml`, `${process.env.NEXT_PUBLIC_URL}/feed`],
+    host: process.env.NEXT_PUBLIC_URL,
+    sitemap: [`${process.env.NEXT_PUBLIC_URL}/sitemap.xml`],
   };
 }

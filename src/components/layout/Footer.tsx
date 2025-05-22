@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from 'next/link';
 import { getHeaders, getNext } from '@/lib/fetchingFunc';
 import { author, enableShowGitHubProfile, enableShowXProfile } from '@/static/constant';
-import Link from 'next/link';
 
 export default async function Footer() {
   const githubProfile = await fetch(`https://api.github.com/user`, {
@@ -110,6 +110,12 @@ export default async function Footer() {
             )}
           </div>
         </div>
+        <p className='mb-4'>
+          <small className='mr-2'>(管理者用)</small>
+          <Link href='/dashboard' className='underline'>
+            ダッシュボード
+          </Link>
+        </p>
         <small>&copy; {author.name}</small>
         <small>
           Build with&nbsp;
@@ -119,7 +125,7 @@ export default async function Footer() {
             rel='noopener noreferrer'
             href='https://github.com/isirmt/NextjsBlogWithGitPAT'
           >
-            ブログもち
+            NextjsBlogWithGitPAT
           </Link>
           &nbsp; (
           {baseRepoCommitIsPresenting ? (

@@ -11,6 +11,7 @@ export type Post = {
   slug: string;
   excerpt: string;
   data: PostData;
+  content: string;
 };
 
 export type SeriesData = {

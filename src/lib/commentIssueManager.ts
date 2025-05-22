@@ -1,5 +1,5 @@
-import { Comment, Issue } from '@/static/issueType';
 import { cache } from 'react';
+import { Comment, Issue } from '@/static/issueType';
 import { fetchAllData, getHeaders, getNext } from './fetchingFunc';
 
 const issueCreationMap: Record<string, Promise<void> | undefined> = {};

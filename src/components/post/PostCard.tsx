@@ -1,16 +1,19 @@
+'use client';
+import React, { useTransition } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { makeExcerpt } from '@/lib/textFormatter';
+import { Post } from '@/static/postType';
+import LoadingCircle from '../LoadingCircle';
 import TagBanner from '../tag/TagBanner';
 import DateCard from './DateCard';
-import { Post } from '@/static/postType';
-import { makeExcerpt } from '@/lib/textFormatter';
-import Image from 'next/image';
-import React from 'react';
 
-function PostDescription({ post }: { post: Post }) {
+function PostDescription({ post, isPending }: { post: Post; isPending: boolean }) {
   return (
-    <div className='flex min-h-28 items-center'>
+    <div className='relative flex min-h-28 items-center'>
       <DateCard date={post.data.date} />
-      <div className='ml-2 mt-2 flex flex-grow flex-col'>
+      <div className={`ml-2 mt-2 flex flex-grow flex-col ${isPending ? 'opacity-50' : ''} transition-opacity`}>
         <p className='mb-1 mr-4 border-b text-lg leading-6 transition-colors dark:border-slate-700'>
           {post.data.series ? (
             <span className='mr-1.5 inline-block bg-slate-200 px-1 py-0.5 text-sm transition-colors dark:bg-slate-700'>
@@ -19,9 +22,19 @@ function PostDescription({ post }: { post: Post }) {
           ) : (
             <></>
           )}
-          <span className='transition-colors dark:text-white'>{post.data.title}</span>
+          <span className='break-all transition-colors dark:text-white'>{post.data.title}</span>
         </p>
-        <p className='mb-2 px-4 text-xs leading-3'>{makeExcerpt(post.excerpt, 64)}</p>
+        <p className='mb-2 break-all px-4 text-xs leading-3'>{makeExcerpt(post.excerpt, 64)}</p>
+      </div>
+      <div
+        className={`${isPending ? 'opacity-100' : 'opacity-0'} absolute z-50 size-full bg-white transition-all dark:bg-slate-800`}
+      >
+        <div className='flex size-full animate-pulse items-center justify-center'>
+          <div className='scale-50'>
+            <LoadingCircle />
+          </div>
+          読み込み中
+        </div>
       </div>
     </div>
   );
@@ -53,11 +66,21 @@ function PostLinks({ post }: { post: Post }) {
 }
 
 export function PostCard({ post }: { post: Post }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   return (
     <div className='w-full rounded-md border border-transparent bg-white transition-all hover:border-gray-200 hover:shadow-md dark:bg-slate-800'>
       <div>
-        <Link href={`/post/${post.slug}`}>
-          <PostDescription post={post} />
+        <Link
+          onClick={() => {
+            startTransition(() => {
+              router.push(`/post/${post.slug}`);
+            });
+          }}
+          href={`/post/${post.slug}`}
+        >
+          <PostDescription post={post} isPending={isPending} />
         </Link>
       </div>
       <PostLinks post={post} />
@@ -66,23 +89,24 @@ export function PostCard({ post }: { post: Post }) {
 }
 
 export function PostLargeCard({ post }: { post: Post }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   return (
     <div className='w-full rounded-md border border-transparent bg-white transition-all hover:border-gray-200 hover:shadow-md dark:bg-slate-800'>
       <div>
-        <Link href={`/post/${post.slug}`}>
+        <Link
+          onClick={() => {
+            startTransition(() => {
+              router.push(`/post/${post.slug}`);
+            });
+          }}
+          href={`/post/${post.slug}`}
+        >
           <div className='overflow-hidden rounded-md bg-slate-100 dark:bg-slate-700'>
-            <Image
-              alt={post.data.title}
-              width={1200}
-              height={630}
-              src={
-                post.data.thumbnail
-                  ? `/api/get-thumbnail?path=${encodeURIComponent(post.data.thumbnail)}`
-                  : `/api/ogp-posts/${post.slug}`
-              }
-            />
+            <Image alt={post.data.title} width={1200} height={630} src={`/api/ogp-posts/${post.slug}`} />
           </div>
-          <PostDescription post={post} />
+          <PostDescription post={post} isPending={isPending} />
         </Link>
       </div>
       <PostLinks post={post} />

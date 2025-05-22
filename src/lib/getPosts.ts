@@ -1,11 +1,11 @@
-import matter from 'gray-matter';
 import { cache } from 'react';
-import { MarkdownToPlainText } from './markdownConverter';
-import type { Post, PostData, SeriesData } from '@/static/postType';
-import { comparePosts, compareSeriesPosts } from './postSorter';
-import { makeExcerpt } from './textFormatter';
+import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
 import { fetchAllData, getHeaders, getNext } from './fetchingFunc';
+import { MarkdownToPlainText } from './markdownConverter';
+import { comparePosts, compareSeriesPosts } from './postSorter';
+import { makeExcerpt } from './textFormatter';
+import type { Post, PostData, SeriesData } from '@/static/postType';
 
 const gitContentPath = `https://api.github.com/repos/${process.env.GIT_USERNAME!}/${process.env.GIT_REPO!}/contents`;
 
@@ -29,7 +29,7 @@ const getPostContent = cache(async (path: string): Promise<{ data: PostData; con
   const outputData = pathParts.length > 2 ? { ...data, series: pathParts[1] } : data;
 
   const plainText = await MarkdownToPlainText(content);
-  const excerpt = makeExcerpt(plainText, 128);
+  const excerpt = makeExcerpt(plainText, 200);
 
   return {
     data: outputData as PostData,
@@ -47,12 +47,13 @@ export const getSeriesProps = cache(async () => {
 });
 
 async function createPostFromFile(item: any, dir: string): Promise<Post | null> {
-  const { data, excerpt } = await getPostContent(`${dir}/${item.name}`);
+  const { data, excerpt, content } = await getPostContent(`${dir}/${item.name}`);
   if (data.title) {
     return {
       slug: item.path.replace(`${process.env.GIT_POSTS_DIR}/`, '').replace('.md', ''),
       data,
       excerpt,
+      content,
     };
   }
   return null;
@@ -127,6 +128,8 @@ export const getImage = cache(async (path: string) => {
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
+
+  if (!fileJson.git_url) return '';
 
   const imageJson = await fetch(fileJson.git_url, {
     ...getHeaders(),
