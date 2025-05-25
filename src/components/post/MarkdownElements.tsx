@@ -76,7 +76,7 @@ const H2 = ({
 }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
     <div
-      className='mb-4 scroll-mt-16 border-b transition-colors dark:border-slate-700 dark:text-white'
+      className='mb-4 border-b transition-colors dark:border-slate-700 dark:text-white'
       id={node!.position?.start.line.toString()}
     >
       <h2 {...props}>{props.children}</h2>
@@ -89,11 +89,7 @@ const H3 = ({
   ...props
 }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
-    <h3
-      {...props}
-      className='scroll-mt-16 transition-colors dark:text-white'
-      id={node!.position?.start.line.toString()}
-    >
+    <h3 {...props} className='transition-colors dark:text-white' id={node!.position?.start.line.toString()}>
       {props.children}
     </h3>
   );
@@ -149,7 +145,7 @@ const A = ({
   ...props
 }: ClassAttributes<HTMLAnchorElement> &
   HTMLAttributes<HTMLAnchorElement> & { href?: string; children?: React.ReactNode }) => {
-  const isInternalLink = href?.startsWith('/');
+  const isInternalLink = href?.startsWith('/') || href?.startsWith('#');
   const displayText = typeof children === 'string' ? children : '';
 
   if (href && displayText === href) {
