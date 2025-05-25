@@ -31,22 +31,27 @@ async function ExA({ path, isInner }: { path: string; isInner: boolean }) {
     const descriptionBase = meta['og:description'] ? meta['og:description'] : meta.description ? meta.description : '';
     const description = makeExcerpt(descriptionBase, 15);
     return (
-      <span className='my-4 flex h-24 w-full justify-between gap-1 overflow-hidden rounded-md border border-slate-100 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700'>
-        <span className='flex flex-col justify-between overflow-hidden px-3 py-4'>
-          <span className='flex flex-col gap-0.5'>
-            <span className='block whitespace-nowrap font-bold'>{title}</span>
-            <span className='block whitespace-nowrap text-xs'>{description}</span>
+      <span className='my-4 flex h-24 w-full justify-between gap-1 overflow-hidden rounded border border-slate-100 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700'>
+        <span className='flex flex-shrink flex-row items-stretch justify-start'>
+          <span className='flex w-6 flex-shrink-0 items-center justify-center overflow-hidden bg-slate-200 py-1 text-center text-xl font-bold tracking-widest text-slate-500 [writing-mode:vertical-rl]'>
+            LINK
           </span>
-          <span className='block'>
-            <span className='block whitespace-nowrap text-xs'>
-              <span className='i-tabler-world relative top-0.5 mr-0.5 bg-gray-700 dark:bg-slate-500' />
-              {makeExcerpt(meta.url, 36)}
+          <span className='flex flex-shrink flex-col justify-between overflow-hidden px-3 py-4'>
+            <span className='flex flex-col gap-0.5'>
+              <span className='block whitespace-nowrap font-bold'>{title}</span>
+              <span className='block whitespace-nowrap text-xs'>{description}</span>
+            </span>
+            <span className='block'>
+              <span className='block whitespace-nowrap text-xs'>
+                <span className='i-tabler-world relative top-0.5 mr-0.5 bg-gray-700 dark:bg-slate-500' />
+                {makeExcerpt(meta.url, 36)}
+              </span>
             </span>
           </span>
         </span>
         {meta['og:image'] ? (
-          <span className='flex h-full flex-col items-center justify-center overflow-hidden'>
-            <img className='m-0 h-full w-auto' alt='thumb' src={meta['og:image']} />
+          <span className='flex h-full flex-shrink-0 flex-col items-center justify-center overflow-hidden'>
+            <img className='m-0 h-full w-auto' loading='lazy' alt='thumb' src={meta['og:image']} />
           </span>
         ) : (
           <></>
