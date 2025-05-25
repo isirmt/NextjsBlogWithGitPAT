@@ -5,8 +5,8 @@ import * as React from 'react';
 import ReactMarkdown, { Components, ExtraProps } from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { getImage } from '@/lib/getPosts';
@@ -15,6 +15,7 @@ import { makeExcerpt } from '@/lib/textFormatter';
 import { HeadMeta } from '@/static/metaType';
 import { ExplainingBanner } from '../UserBanner';
 import CopyToClipboard from './CopyToClipboard';
+import 'katex/dist/katex.min.css';
 
 async function ExImg({ path, alt }: { path: string; alt?: string }) {
   const image64 = await getImage(path);
@@ -181,7 +182,7 @@ export function PostMarkdown({ content }: { content: string }) {
         disallowedElements={['h1']}
         components={components}
         remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
       >
         {content}
       </ReactMarkdown>
@@ -196,7 +197,7 @@ export function CommentMarkdown({ content }: { content: string }) {
         disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe', 'script']}
         components={components}
         remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
       >
         {content}
       </ReactMarkdown>
