@@ -31,9 +31,9 @@ async function ExA({ path, isInner }: { path: string; isInner: boolean }) {
     const descriptionBase = meta['og:description'] ? meta['og:description'] : meta.description ? meta.description : '';
     const description = makeExcerpt(descriptionBase, 15);
     return (
-      <span className='my-4 flex h-24 w-full justify-between gap-1 overflow-hidden rounded border border-slate-100 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700'>
+      <span className='group my-4 flex h-24 w-full justify-between gap-1 overflow-hidden rounded border border-slate-100 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700'>
         <span className='flex flex-shrink flex-row items-stretch justify-start'>
-          <span className='flex w-6 flex-shrink-0 items-center justify-center overflow-hidden bg-slate-200 py-1 text-center text-xl font-bold tracking-widest text-slate-500 [writing-mode:vertical-rl]'>
+          <span className='flex w-6 flex-shrink-0 items-center justify-center overflow-hidden bg-slate-200 py-1 text-center text-xl font-bold tracking-widest text-slate-500 transition-colors [writing-mode:vertical-rl] group-hover:text-slate-600 dark:bg-slate-700 dark:text-slate-400 dark:group-hover:text-slate-300'>
             LINK
           </span>
           <span className='flex flex-shrink flex-col justify-between overflow-hidden px-3 py-4'>
