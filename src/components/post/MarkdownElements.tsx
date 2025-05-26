@@ -5,8 +5,8 @@ import * as React from 'react';
 import ReactMarkdown, { Components, ExtraProps } from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { getImage } from '@/lib/getPosts';
@@ -15,6 +15,7 @@ import { makeExcerpt } from '@/lib/textFormatter';
 import { HeadMeta } from '@/static/metaType';
 import { ExplainingBanner } from '../UserBanner';
 import CopyToClipboard from './CopyToClipboard';
+import 'katex/dist/katex.min.css';
 
 async function ExImg({ path, alt }: { path: string; alt?: string }) {
   const image64 = await getImage(path);
@@ -30,22 +31,27 @@ async function ExA({ path, isInner }: { path: string; isInner: boolean }) {
     const descriptionBase = meta['og:description'] ? meta['og:description'] : meta.description ? meta.description : '';
     const description = makeExcerpt(descriptionBase, 15);
     return (
-      <span className='my-4 flex h-24 w-full justify-between gap-1 overflow-hidden rounded-md border border-slate-100 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700'>
-        <span className='flex flex-col justify-between overflow-hidden px-3 py-4'>
-          <span className='flex flex-col gap-0.5'>
-            <span className='block whitespace-nowrap font-bold'>{title}</span>
-            <span className='block whitespace-nowrap text-xs'>{description}</span>
+      <span className='group my-4 flex h-24 w-full justify-between gap-1 overflow-hidden rounded border border-slate-100 shadow-sm transition-shadow hover:shadow-md dark:border-slate-700'>
+        <span className='flex flex-shrink flex-row items-stretch justify-start'>
+          <span className='flex w-6 flex-shrink-0 items-center justify-center overflow-hidden bg-slate-200 py-1 text-center text-xl font-bold tracking-widest text-slate-500 transition-colors [writing-mode:vertical-rl] group-hover:text-slate-600 dark:bg-slate-700 dark:text-slate-400 dark:group-hover:text-slate-300'>
+            LINK
           </span>
-          <span className='block'>
-            <span className='block whitespace-nowrap text-xs'>
-              <span className='i-tabler-world relative top-0.5 mr-0.5 bg-gray-700 dark:bg-slate-500' />
-              {makeExcerpt(meta.url, 36)}
+          <span className='flex flex-shrink flex-col justify-between overflow-hidden px-3 py-4'>
+            <span className='flex flex-col gap-0.5'>
+              <span className='block whitespace-nowrap font-bold'>{title}</span>
+              <span className='block whitespace-nowrap text-xs'>{description}</span>
+            </span>
+            <span className='block'>
+              <span className='block whitespace-nowrap text-xs'>
+                <span className='i-tabler-world relative top-0.5 mr-0.5 bg-gray-700 dark:bg-slate-500' />
+                {makeExcerpt(meta.url, 36)}
+              </span>
             </span>
           </span>
         </span>
         {meta['og:image'] ? (
-          <span className='flex h-full flex-col items-center justify-center overflow-hidden'>
-            <img className='m-0 h-full w-auto' alt='thumb' src={meta['og:image']} />
+          <span className='flex h-full flex-shrink-0 flex-col items-center justify-center overflow-hidden'>
+            <img className='m-0 h-full w-auto' loading='lazy' alt='thumb' src={meta['og:image']} />
           </span>
         ) : (
           <></>
@@ -75,7 +81,7 @@ const H2 = ({
 }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
     <div
-      className='mb-4 scroll-mt-16 border-b transition-colors dark:border-slate-700 dark:text-white'
+      className='mb-4 border-b transition-colors dark:border-slate-700 dark:text-white'
       id={node!.position?.start.line.toString()}
     >
       <h2 {...props}>{props.children}</h2>
@@ -88,11 +94,7 @@ const H3 = ({
   ...props
 }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
-    <h3
-      {...props}
-      className='scroll-mt-16 transition-colors dark:text-white'
-      id={node!.position?.start.line.toString()}
-    >
+    <h3 {...props} className='transition-colors dark:text-white' id={node!.position?.start.line.toString()}>
       {props.children}
     </h3>
   );
@@ -148,7 +150,7 @@ const A = ({
   ...props
 }: ClassAttributes<HTMLAnchorElement> &
   HTMLAttributes<HTMLAnchorElement> & { href?: string; children?: React.ReactNode }) => {
-  const isInternalLink = href?.startsWith('/');
+  const isInternalLink = href?.startsWith('/') || href?.startsWith('#');
   const displayText = typeof children === 'string' ? children : '';
 
   if (href && displayText === href) {
@@ -181,7 +183,7 @@ export function PostMarkdown({ content }: { content: string }) {
         disallowedElements={['h1']}
         components={components}
         remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
       >
         {content}
       </ReactMarkdown>
@@ -196,7 +198,7 @@ export function CommentMarkdown({ content }: { content: string }) {
         disallowedElements={['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'iframe', 'script']}
         components={components}
         remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSanitize]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
       >
         {content}
       </ReactMarkdown>
