@@ -1,3 +1,7 @@
+.markdown * {
+  @apply scroll-mt-16;
+}
+
 .markdown h1 {
   @apply my-4 text-3xl;
 }
@@ -30,6 +34,18 @@
   @apply break-all text-blue-700 underline transition-colors hover:no-underline dark:text-blue-600;
 }
 
+.markdown sup > a.post_hyper_url {
+  @apply mr-0.5 rounded bg-blue-100 px-1 py-0.5 text-blue-800 underline hover:bg-blue-200 hover:underline dark:bg-slate-800 dark:text-blue-600 dark:hover:bg-slate-700;
+}
+
+.markdown section.footnotes {
+  @apply rounded bg-gray-100 py-1 dark:bg-slate-700;
+}
+
+.markdown section.footnotes .data-footnote-backref {
+  @apply rounded bg-blue-100 px-1 py-0.5 text-blue-800 transition-colors hover:bg-blue-200 dark:bg-slate-700 dark:text-blue-600 dark:hover:bg-slate-800;
+}
+
 .markdown ul:not(.contains-task-list),
 .markdown ol {
   @apply my-2 ml-8;
@@ -44,19 +60,19 @@
 }
 
 .markdown table {
-  @apply w-full border-collapse border-spacing-0 text-center;
+  @apply my-3 w-full border-collapse border-spacing-0 text-center;
 }
 
 .markdown table th {
-  @apply rounded-t-sm border-2 border-solid border-white bg-[#b9e0de] p-2;
+  @apply rounded-t-sm border-2 border-solid border-white bg-sky-100 p-2 dark:border-slate-800 dark:bg-sky-950;
 }
 
 .markdown table td {
-  @apply border-2 border-white p-2;
+  @apply border-2 border-white p-2 dark:border-slate-800;
 }
 
 .markdown table tr:nth-child(2n) {
-  @apply bg-[#f5f5f5];
+  @apply bg-gray-100 dark:bg-slate-700;
 }
 
 .markdown .post_codeblock {
