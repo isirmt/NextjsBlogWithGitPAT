@@ -23,6 +23,7 @@
     "chart.js": "^4.4.4",
     "gray-matter": "^4.0.3",
     "jsdom": "^25.0.1",
+    "katex": "^0.16.22",
     "lodash": "^4.17.21",
     "lru-cache": "^11.0.1",
     "markdown-to-txt": "^2.0.1",
