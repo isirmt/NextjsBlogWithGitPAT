@@ -36,7 +36,7 @@ export default async function Blogs() {
       <JsonLd jsonLd={jsonLd} />
       <Side>
         <TipsCard>
-          ブログへようこそ！
+          Mac020k ブログへようこそ！
           <br />
           <Link target='_blank' rel='noopener noreferrer' href='https://github.com/isirmt/NextjsBlogWithGitPAT/issues'>
             <u>バグ・問題等の報告はこちらへ</u>
@@ -44,7 +44,7 @@ export default async function Blogs() {
         </TipsCard>
       </Side>
       <SectionNoP>
-        <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#0e4589] p-0'>
+        <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#FF6018] p-0'>
           <InlineVideo fileName={headerMovName} />
         </div>
         <div className='px-8 pb-8 pt-3'>
