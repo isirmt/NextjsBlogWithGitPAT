@@ -17,10 +17,37 @@ import { ExplainingBanner } from '../UserBanner';
 import CopyToClipboard from './CopyToClipboard';
 import 'katex/dist/katex.min.css';
 
-async function ExImg({ path, alt }: { path: string; alt?: string }) {
+async function ExImg({
+  path,
+  alt,
+  width,
+  height,
+  style,
+  className,
+  ...restProps
+}: {
+  path: string;
+  alt?: string;
+  width?: string | number;
+  height?: string | number;
+  style?: React.CSSProperties;
+  className?: string;
+  [key: string]: any;
+}) {
   const image64 = await getImage(path);
   const mimeType = getImageMimeType(path);
-  if (image64 !== '') return <img alt={alt} src={`data:${mimeType};base64,${image64}`} />;
+  if (image64 !== '')
+    return (
+      <img
+        alt={alt}
+        src={`data:${mimeType};base64,${image64}`}
+        width={width}
+        height={height}
+        style={style}
+        className={className}
+        {...restProps}
+      />
+    );
   else return <ExplainingBanner>画像取得に失敗しました</ExplainingBanner>;
 }
 
@@ -108,7 +135,8 @@ const Img = ({
   const src = (props.src as string) || '';
   const alt = (props.alt as string) || '';
   if (src.startsWith(`/${process.env.GIT_IMAGES_DIR!}/`)) {
-    return <ExImg path={src} alt={alt} />;
+    const { src: _, children: __, ...imgProps } = props;
+    return <ExImg path={src} alt={alt} {...imgProps} />;
   } else return <img {...props}>{props.children}</img>;
 };
 
