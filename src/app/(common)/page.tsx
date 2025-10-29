@@ -44,7 +44,7 @@ export default async function Blogs() {
         </TipsCard>
       </Side>
       <SectionNoP>
-        <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#FF6018] p-0'>
+        <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#0e4589] p-0'>
           <InlineVideo fileName={headerMovName} />
         </div>
         <div className='px-8 pb-8 pt-3'>
