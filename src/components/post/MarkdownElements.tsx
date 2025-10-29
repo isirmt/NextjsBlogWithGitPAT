@@ -135,6 +135,7 @@ const Img = ({
   const src = (props.src as string) || '';
   const alt = (props.alt as string) || '';
   if (src.startsWith(`/${process.env.GIT_IMAGES_DIR!}/`)) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { src: _, children: __, ...imgProps } = props;
     return <ExImg path={src} alt={alt} {...imgProps} />;
   } else return <img {...props}>{props.children}</img>;
