@@ -29,9 +29,23 @@ export async function GET() {
   );
 
   return new Response(feed.xml(), {
+    status: 200,
     headers: {
       'Content-Type': 'application/xml',
       'Cache-Control': `s-maxage=${revalidate}, stale-while-revalidate`,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    },
+  });
+}
+
+export function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
     },
   });
 }
