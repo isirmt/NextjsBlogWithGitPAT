@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import InlineVideo from '@/components/InlineVideo';
 import { InnerLinkBlueButton } from '@/components/InnerLinkButton';
 import TipsCard from '@/components/TipsCard';
 import Footer from '@/components/layout/Footer';
@@ -7,7 +6,6 @@ import Header from '@/components/layout/Header';
 import Menu from '@/components/layout/Menu';
 import { Main, SectionNoP, Side, Title } from '@/components/layout/PageLayout';
 import { generateMetadataTemplate } from '@/lib/SEO';
-import { headerMovName } from '@/static/constant';
 import '@/styles/globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +27,7 @@ export default async function NotFound() {
           </Side>
           <SectionNoP>
             <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#0e4589] p-0'>
-              <InlineVideo fileName={headerMovName} />
+              <video src='/header_mov.mp4' autoPlay loop muted playsInline />
             </div>
             <div className='px-8 pb-8 pt-3'>
               <Title>404 Not Found</Title>

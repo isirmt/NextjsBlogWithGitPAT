@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { WebSite, WithContext } from 'schema-dts';
-import InlineVideo from '@/components/InlineVideo';
 import { InnerLinkBlueButton } from '@/components/InnerLinkButton';
 import JsonLd from '@/components/JsonLd';
 import SearchBoxWrapper from '@/components/SearchBoxWrapper';
@@ -13,7 +12,7 @@ import PostPaging from '@/components/post/PostPaging';
 import FavoriteTags from '@/components/tag/FavoriteTags';
 import { generateMetadataTemplate } from '@/lib/SEO';
 import { getPostsProps } from '@/lib/getPosts';
-import { headerMovName, siteName } from '@/static/constant';
+import { siteName } from '@/static/constant';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({
@@ -45,7 +44,7 @@ export default async function Blogs() {
       </Side>
       <SectionNoP>
         <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#0e4589] p-0'>
-          <InlineVideo fileName={headerMovName} />
+          <video src='/header_mov.mp4' autoPlay loop muted playsInline />
         </div>
         <div className='px-8 pb-8 pt-3'>
           <Title>{siteName}</Title>
