@@ -43,7 +43,7 @@
 }
 
 .markdown sup > a.post_hyper_url {
-  @apply mr-0.5 rounded bg-blue-100 px-1 py-0.5 text-blue-800 no-underline hover:bg-blue-200 hover:underline hover:no-underline dark:bg-slate-800 dark:text-blue-600 dark:hover:bg-slate-700;
+  @apply mr-0.5 rounded bg-blue-100 px-1 py-0.5 text-blue-800 no-underline hover:bg-blue-200 hover:no-underline dark:bg-slate-800 dark:text-blue-600 dark:hover:bg-slate-700;
 }
 
 .markdown section.footnotes {
