@@ -112,7 +112,7 @@ const H2 = ({
 }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
     <div
-      className='mb-4 border-b transition-colors dark:border-slate-700 dark:text-white'
+      className='mb-4 mt-3 border-b-2 border-blue-200 text-blue-700 transition-colors dark:border-slate-700 dark:text-white'
       id={node!.position?.start.line.toString()}
     >
       <h2 {...props}>{props.children}</h2>
