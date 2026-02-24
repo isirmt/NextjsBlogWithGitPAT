@@ -3,14 +3,13 @@
 import { ClassAttributes, HTMLAttributes } from 'react';
 import * as React from 'react';
 import ReactMarkdown, { Components, ExtraProps } from 'react-markdown';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { getImage } from '@/lib/getPosts';
 import { getImageMimeType } from '@/lib/mime-getter';
+import { highlightCodeBlock } from '@/lib/shiki';
 import { makeExcerpt } from '@/lib/textFormatter';
 import { HeadMeta } from '@/static/metaType';
 import { ExplainingBanner } from '../UserBanner';
@@ -144,6 +143,32 @@ const Img = ({
   } else return <img {...props}>{props.children}</img>;
 };
 
+async function AwaitingPre({
+  normalizedCode,
+  language,
+  fileName,
+}: {
+  normalizedCode: string;
+  language: string;
+  fileName?: string;
+}) {
+  const highlightedCode = await highlightCodeBlock(normalizedCode, language);
+
+  return (
+    <div className='post_codeblock w-full'>
+      {fileName && (
+        <div className='post_fname'>
+          <span>{fileName}</span>
+        </div>
+      )}
+      <div className='post_shiki' dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+      <div className='sticky bottom-2 flex'>
+        <CopyToClipboard text={normalizedCode} />
+      </div>
+    </div>
+  );
+}
+
 const Pre = ({ children, ...props }: ClassAttributes<HTMLPreElement> & HTMLAttributes<HTMLPreElement> & ExtraProps) => {
   if (!React.isValidElement(children)) {
     return <code {...props}>{children}</code>;
@@ -158,22 +183,8 @@ const Pre = ({ children, ...props }: ClassAttributes<HTMLPreElement> & HTMLAttri
   const classList = className ? className.split(':') : [];
   const language = classList[0]?.replace('language-', '');
   const fileName = classList[1];
-
-  return (
-    <div className='post_codeblock w-full'>
-      {fileName && (
-        <div className='post_fname'>
-          <span>{fileName}</span>
-        </div>
-      )}
-      <SyntaxHighlighter language={language} style={atomOneDark}>
-        {String(code).replace(/\n$/, '')}
-      </SyntaxHighlighter>
-      <div className='sticky bottom-2 flex'>
-        <CopyToClipboard text={String(code).replace(/\n$/, '')} />
-      </div>
-    </div>
-  );
+  const normalizedCode = String(code).replace(/\n$/, '');
+  return <AwaitingPre normalizedCode={normalizedCode} language={language} fileName={fileName} />;
 };
 
 const A = ({
