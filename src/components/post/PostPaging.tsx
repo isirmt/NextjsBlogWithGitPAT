@@ -14,7 +14,6 @@ import 'swiper/css/scrollbar';
 
 interface ShowingOptionState {
   isLarge: boolean;
-  // eslint-disable-next-line no-unused-vars
   setIsLarge: (flag: boolean) => void;
 }
 

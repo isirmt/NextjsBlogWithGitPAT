@@ -9,7 +9,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    // eslint-disable-next-line no-unused-vars
     async jwt({ token, user, account, profile }) {
       if (profile) {
         token.username = profile.login;
