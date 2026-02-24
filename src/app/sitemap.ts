@@ -2,8 +2,7 @@ import { MetadataRoute } from 'next';
 import { getPostsProps } from '@/lib/getPosts';
 import { lastModified } from '@/static/constant';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 1200;
 
 const staticPaths = ['/post', '/profile', '/series', '/tags'];
 

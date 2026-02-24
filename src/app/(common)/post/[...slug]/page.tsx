@@ -8,13 +8,23 @@ import Article from '@/components/layout/ArticlePage';
 import { Main, SideMDShown } from '@/components/layout/PageLayout';
 import PostIndex from '@/components/post/PostIndex';
 import { generateMetadataTemplate } from '@/lib/SEO';
-import { getPost } from '@/lib/getPosts';
+import { getPost, getPostsProps } from '@/lib/getPosts';
 import { author } from '@/static/constant';
+
+export const revalidate = 300;
+export const dynamicParams = true;
 
 const getFileContent = cache(async (path: string) => {
   const postPath = `${process.env.GIT_POSTS_DIR!}/${path}.md`;
   return await getPost(postPath);
 });
+
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
+  const posts = await getPostsProps();
+  return posts.map((post) => ({
+    slug: post.slug.split('/'),
+  }));
+}
 
 export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug.join('/'));

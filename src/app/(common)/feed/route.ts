@@ -3,7 +3,6 @@ import { getPostsProps } from '@/lib/getPosts';
 import { siteName } from '@/static/constant';
 import { lastModified } from '@/static/constant';
 
-export const dynamic = 'force-dynamic';
 export const revalidate = 1200;
 
 const baseURL = process.env.NEXT_PUBLIC_URL!;
