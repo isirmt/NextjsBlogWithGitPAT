@@ -209,7 +209,6 @@ export const components: Partial<Components> = {
 };
 
 export function PostMarkdown({ content }: { content: string }) {
-  console.log(content);
   return (
     <div className='markdown'>
       <ReactMarkdown
