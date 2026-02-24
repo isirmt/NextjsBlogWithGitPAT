@@ -10,6 +10,10 @@
   @apply relative mt-4 w-full text-2xl font-bold;
 }
 
+.markdown h2#footnote-label {
+  @apply pl-4;
+}
+
 .markdown h3 {
   @apply my-2 font-bold text-blue-800;
 }
@@ -39,7 +43,7 @@
 }
 
 .markdown sup > a.post_hyper_url {
-  @apply mr-0.5 rounded bg-blue-100 px-1 py-0.5 text-blue-800 underline hover:bg-blue-200 hover:underline dark:bg-slate-800 dark:text-blue-600 dark:hover:bg-slate-700;
+  @apply mr-0.5 rounded bg-blue-100 px-1 py-0.5 text-blue-800 no-underline hover:bg-blue-200 hover:underline hover:no-underline dark:bg-slate-800 dark:text-blue-600 dark:hover:bg-slate-700;
 }
 
 .markdown section.footnotes {
@@ -47,7 +51,12 @@
 }
 
 .markdown section.footnotes .data-footnote-backref {
-  @apply rounded bg-blue-100 px-1 py-0.5 text-blue-800 transition-colors hover:bg-blue-200 dark:bg-slate-700 dark:text-blue-600 dark:hover:bg-slate-800;
+  @apply relative text-[0];
+}
+
+.markdown section.footnotes .data-footnote-backref::after {
+  content: 'ref';
+  @apply relative inline-block rounded bg-blue-100 px-1 py-0.5 text-xs font-normal text-blue-800 transition-colors hover:bg-blue-200 dark:bg-slate-700 dark:text-blue-600 dark:hover:bg-slate-800;
 }
 
 .markdown ul:not(.contains-task-list),
