@@ -4,10 +4,11 @@ import { fetchAllData, getHeaders, getNext } from './fetchingFunc';
 
 const issueCreationMap: Record<string, Promise<void> | undefined> = {};
 const gitIssuePath = `https://api.github.com/repos/${process.env.GIT_USERNAME!}/${process.env.GIT_REPO!}/issues`;
+const ISSUE_CHECK_REVALIDATE = 20;
 
 const getFilteredIssuePath = (slug: string) => `${gitIssuePath}?q=${encodeURIComponent(slug)}+in:title&state=all`;
 
-async function getIssue(slug: string, revalidate: number = 120) {
+async function getIssue(slug: string, revalidate: number = ISSUE_CHECK_REVALIDATE) {
   const data = await fetchAllData(getFilteredIssuePath(slug), revalidate);
 
   if (data && data.length > 0) {
@@ -27,7 +28,7 @@ async function getIssue(slug: string, revalidate: number = 120) {
 const createIssue = cache(async (slug: string) => {
   if (!issueCreationMap[slug]) {
     issueCreationMap[slug] = (async () => {
-      const targetIssue = await getIssue(slug, 0);
+      const targetIssue = await getIssue(slug, ISSUE_CHECK_REVALIDATE);
       if (targetIssue) return;
       const data = {
         title: slug,
