@@ -14,7 +14,8 @@ const getContents = cache(async (slug: string) => {
   return getSeries(slug);
 });
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const slug = decodeURIComponent(params.slug);
   const series = await getContents(slug);
 
@@ -36,7 +37,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function PostListWithTag({ params }: { params: { slug: string } }) {
+export default async function PostListWithTag(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const slug = decodeURIComponent(params.slug);
   const series = await getContents(slug);
 

@@ -29,7 +29,7 @@ const authorize = async (token: string) => {
 
 export async function POST(req: NextRequest) {
   const { slug, comment, token } = await req.json();
-  const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown';
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown';
 
   if (!slug || !comment || !token) {
     return NextResponse.json({ error: 'Missing slug or comment body' }, { status: 400 });

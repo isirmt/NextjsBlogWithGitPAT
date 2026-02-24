@@ -7,11 +7,8 @@ import { generateMetadataTemplate } from '@/lib/SEO';
 import { getPostsProps } from '@/lib/getPosts';
 import { siteName } from '@/static/constant';
 
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string };
-}): Promise<Metadata> {
+export async function generateMetadata(props: { searchParams: Promise<{ [key: string]: string }> }): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const query = searchParams['q'] ?? '';
   const keywords = Array.from(
     new Set(
@@ -28,7 +25,8 @@ export async function generateMetadata({
   });
 }
 
-export default async function SearchPage({ searchParams }: { searchParams: { [key: string]: string } }) {
+export default async function SearchPage(props: { searchParams: Promise<{ [key: string]: string }> }) {
+  const searchParams = await props.searchParams;
   const posts = await getPostsProps();
   const query = searchParams['q'] ?? '';
   const keywords = Array.from(

@@ -145,16 +145,16 @@ const Img = ({
 };
 
 const Pre = ({ children, ...props }: ClassAttributes<HTMLPreElement> & HTMLAttributes<HTMLPreElement> & ExtraProps) => {
-  if (!children || typeof children !== 'object') {
+  if (!React.isValidElement(children)) {
     return <code {...props}>{children}</code>;
   }
-  const childType = 'type' in children ? children.type : '';
-  if (childType !== 'code') {
+  if (children.type !== 'code') {
     return <code {...props}>{children}</code>;
   }
 
-  const childProps = 'props' in children ? children.props : {};
-  const { className, children: code } = childProps;
+  const childProps = children.props as { className?: string; children?: React.ReactNode };
+  const className = typeof childProps.className === 'string' ? childProps.className : '';
+  const code = childProps.children ?? '';
   const classList = className ? className.split(':') : [];
   const language = classList[0]?.replace('language-', '');
   const fileName = classList[1];

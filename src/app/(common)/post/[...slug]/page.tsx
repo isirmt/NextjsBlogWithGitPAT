@@ -26,7 +26,8 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string[] }> }): Promise<Metadata> {
+  const params = await props.params;
   const slug = decodeURIComponent(params.slug.join('/'));
   const { data, excerpt } = await getFileContent(slug);
 
@@ -40,7 +41,8 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
   });
 }
 
-export default async function Post({ params }: { params: { slug: string[] } }) {
+export default async function Post(props: { params: Promise<{ slug: string[] }> }) {
+  const params = await props.params;
   const slug = decodeURIComponent(params.slug.join('/'));
   const { data, content } = await getFileContent(slug);
 

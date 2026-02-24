@@ -5,10 +5,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getImage, getPost } from '@/lib/getPosts';
 import { getImageMimeType } from '@/lib/mime-getter';
 
-export const revalidate = 60 * 20;
+export const revalidate = 1200;
 
-export async function GET(req: NextRequest, context: { params: { slug: string[] } }) {
-  const slug = decodeURIComponent(context.params.slug.join('/'));
+export async function GET(req: NextRequest, context: { params: Promise<{ slug: string[] }> }) {
+  const slug = decodeURIComponent((await context.params).slug.join('/'));
   const { data } = await getPost(`${process.env.GIT_POSTS_DIR!}/${slug}.md`);
   const font = await fs.readFile(path.join(process.cwd(), 'assets', 'NotoSansJP-ExtraBold-Sub.ttf'));
   const base64Image = data.thumbnail ? await getImage(data.thumbnail) : '';

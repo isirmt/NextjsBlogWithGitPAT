@@ -8,14 +8,14 @@ export const revalidate = 1200;
 
 const baseURL = process.env.NEXT_PUBLIC_URL!;
 
-export async function GET(req: NextRequest, context: { params: { slug: string } }) {
-  const slug = decodeURIComponent(context.params.slug);
+export async function GET(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const slug = decodeURIComponent((await context.params).slug);
   const seriesPosts = await getSeries(slug);
 
   const feed = new Rss({
     title: `${siteName}のシリーズ「${seriesPosts.meta.name}」の新着投稿`,
     description: `「${siteName}」のシリーズ${seriesPosts.meta.description ? ': ' + seriesPosts.meta.description : ''}`,
-    feed_url: `${baseURL}/series/${context.params.slug}/feed`,
+    feed_url: `${baseURL}/series/${(await context.params).slug}/feed`,
     site_url: baseURL,
     language: 'ja',
   });
