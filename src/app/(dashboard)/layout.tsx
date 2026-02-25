@@ -1,7 +1,5 @@
 import '@/styles/globals.css';
 import * as React from 'react';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import NextTopLoader from 'nextjs-toploader';
 import DashboardMenu from '@/components/layout/DashboardMenu';
 import Header from '@/components/layout/Header';
@@ -22,8 +20,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         <DashboardMenu />
         <div className='flex-1'>{children}</div>
       </div>
-      <SpeedInsights />
-      <Analytics />
     </div>
   );
 }

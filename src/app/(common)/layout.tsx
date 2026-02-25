@@ -1,7 +1,5 @@
 import '@/styles/globals.css';
 import * as React from 'react';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import NextTopLoader from 'nextjs-toploader';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
@@ -24,8 +22,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         {children}
       </div>
       <Footer />
-      <SpeedInsights />
-      <Analytics />
     </>
   );
 }
