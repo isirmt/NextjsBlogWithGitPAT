@@ -30,6 +30,10 @@
   @apply my-2 leading-8;
 }
 
+.markdown p * {
+  @apply break-all;
+}
+
 .markdown hr {
   @apply my-10;
 }
