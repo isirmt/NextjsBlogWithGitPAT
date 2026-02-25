@@ -1,7 +1,14 @@
 import { cache } from 'react';
 import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
-import { BLOG_CACHE_TAG, BLOG_FALLBACK_REVALIDATE_SECONDS } from './blogCache';
+import {
+  BLOG_FALLBACK_CACHE_TAG,
+  BLOG_FALLBACK_REVALIDATE_SECONDS,
+  BLOG_INDEX_CACHE_TAG,
+  BLOG_PROFILE_CACHE_TAG,
+  getBlogPostCacheTag,
+  getBlogSeriesCacheTag,
+} from './blogCache';
 import { fetchAllData, getHeaders, getNext } from './fetchingFunc';
 import { MarkdownToPlainText } from './markdownConverter';
 import { comparePosts, compareSeriesPosts } from './postSorter';
@@ -9,11 +16,44 @@ import { makeExcerpt } from './textFormatter';
 import type { Post, PostData, SeriesData } from '@/static/postType';
 
 const gitContentPath = `https://api.github.com/repos/${process.env.GIT_USERNAME!}/${process.env.GIT_REPO!}/contents`;
+const postRootDir = process.env.GIT_POSTS_DIR!;
+const profilePath = process.env.GIT_PROFILE_PATH;
+
+function normalizePath(path: string) {
+  return path.replace(/\\/g, '/');
+}
+
+function getPostSlugFromPath(path: string): string | null {
+  const normalizedPath = normalizePath(path);
+  const postDirPrefix = `${postRootDir}/`;
+
+  if (!normalizedPath.startsWith(postDirPrefix) || !normalizedPath.endsWith('.md')) {
+    return null;
+  }
+
+  return normalizedPath.slice(postDirPrefix.length, -3);
+}
+
+function getCacheTagsForContent(path: string): string[] {
+  const normalizedPath = normalizePath(path);
+  const postSlug = getPostSlugFromPath(normalizedPath);
+
+  if (postSlug) {
+    return [getBlogPostCacheTag(postSlug)];
+  }
+
+  if (profilePath && normalizedPath === profilePath) {
+    return [BLOG_PROFILE_CACHE_TAG];
+  }
+
+  return [BLOG_FALLBACK_CACHE_TAG];
+}
 
 const getPostContent = cache(async (path: string): Promise<{ data: PostData; content: string; excerpt: string }> => {
+  const cacheTags = getCacheTagsForContent(path);
   const fileJson = await fetch(`${gitContentPath}/${path}`, {
     ...getHeaders(),
-    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, cacheTags),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
@@ -40,8 +80,9 @@ const getPostContent = cache(async (path: string): Promise<{ data: PostData; con
 });
 
 export const getSeriesProps = cache(async () => {
-  const targetDir = process.env.GIT_POSTS_DIR!;
-  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]);
+  const data = await fetchAllData(`${gitContentPath}/${postRootDir}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [
+    BLOG_INDEX_CACHE_TAG,
+  ]);
   const seriesArray = data.filter((item) => item.type === 'dir').map((item) => item.name as string);
 
   return seriesArray;
@@ -51,7 +92,7 @@ async function createPostFromFile(item: any, dir: string): Promise<Post | null> 
   const { data, excerpt, content } = await getPostContent(`${dir}/${item.name}`);
   if (data.title) {
     return {
-      slug: item.path.replace(`${process.env.GIT_POSTS_DIR}/`, '').replace('.md', ''),
+      slug: item.path.replace(`${postRootDir}/`, '').replace('.md', ''),
       data,
       excerpt,
       content,
@@ -61,9 +102,9 @@ async function createPostFromFile(item: any, dir: string): Promise<Post | null> 
 }
 
 async function createPostsFromDirectory(item: any): Promise<Post[]> {
-  const dirPath = `${process.env.GIT_POSTS_DIR}/${item.name}`;
+  const dirPath = `${postRootDir}/${item.name}`;
   const dirContent = await fetchAllData(`${gitContentPath}/${dirPath}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [
-    BLOG_CACHE_TAG,
+    BLOG_INDEX_CACHE_TAG,
   ]);
 
   const markdownFiles = dirContent.filter((subItem) => subItem.type === 'file' && subItem.name.endsWith('.md'));
@@ -73,8 +114,10 @@ async function createPostsFromDirectory(item: any): Promise<Post[]> {
 }
 
 export const getPostsProps = cache(async (dir?: string): Promise<Post[]> => {
-  const targetDir = dir ? `${process.env.GIT_POSTS_DIR}/${dir}` : process.env.GIT_POSTS_DIR!;
-  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]);
+  const targetDir = dir ? `${postRootDir}/${dir}` : postRootDir;
+  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [
+    BLOG_INDEX_CACHE_TAG,
+  ]);
 
   const postsPromises = data.map(async (item) => {
     if (item.type === 'file' && item.name.endsWith('.md')) {
@@ -94,10 +137,10 @@ export const getPostsProps = cache(async (dir?: string): Promise<Post[]> => {
 
 export const getSeries = cache(async (dir: string) => {
   const postsProps = await getPostsProps(dir);
-  const targetDir = `${process.env.GIT_POSTS_DIR}/${dir}`;
+  const targetDir = `${postRootDir}/${dir}`;
   const fileJson = await fetch(`${gitContentPath}/${targetDir}/meta.json`, {
     ...getHeaders(),
-    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [getBlogSeriesCacheTag(dir)]),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
@@ -125,9 +168,10 @@ export const getPost = cache(async (path: string) => {
 });
 
 export const getImage = cache(async (path: string) => {
+  const cacheTags = getCacheTagsForContent(path);
   const fileJson = await fetch(`${gitContentPath}${path}`, {
     ...getHeaders(),
-    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, cacheTags),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
@@ -136,7 +180,7 @@ export const getImage = cache(async (path: string) => {
 
   const imageJson = await fetch(fileJson.git_url, {
     ...getHeaders(),
-    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, cacheTags),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));

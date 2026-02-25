@@ -1,13 +1,93 @@
 import crypto from 'node:crypto';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
-import { BLOG_CACHE_TAG } from '@/lib/blogCache';
+import {
+  BLOG_FALLBACK_CACHE_TAG,
+  BLOG_INDEX_CACHE_TAG,
+  BLOG_PROFILE_CACHE_TAG,
+  getBlogPostCacheTag,
+  getBlogSeriesCacheTag,
+} from '@/lib/blogCache';
 
-type GitHubPushPayload = { ref?: string; repository?: { full_name?: string }; head_commit?: { id?: string } };
+type GitHubCommit = { added?: string[]; modified?: string[]; removed?: string[] };
+type GitHubPushPayload = {
+  ref?: string;
+  repository?: { full_name?: string };
+  head_commit?: { id?: string };
+  commits?: GitHubCommit[];
+};
 
 const webhookSecret = process.env.GITHUB_WEBHOOK_SECRET;
 const expectedRepository =
   process.env.GIT_USERNAME && process.env.GIT_REPO ? `${process.env.GIT_USERNAME}/${process.env.GIT_REPO}` : null;
+const postRootDir = process.env.GIT_POSTS_DIR;
+const profilePath = process.env.GIT_PROFILE_PATH ? normalizePath(process.env.GIT_PROFILE_PATH) : null;
+
+function normalizePath(path: string) {
+  return path.replace(/\\/g, '/');
+}
+
+function getPostSlugFromPath(path: string): string | null {
+  if (!postRootDir) return null;
+
+  const normalizedPath = normalizePath(path);
+  const postDirPrefix = `${postRootDir}/`;
+
+  if (!normalizedPath.startsWith(postDirPrefix) || !normalizedPath.endsWith('.md')) {
+    return null;
+  }
+
+  return normalizedPath.slice(postDirPrefix.length, -3);
+}
+
+function getSeriesNameFromPostPath(path: string): string | null {
+  const postSlug = getPostSlugFromPath(path);
+  if (!postSlug || !postSlug.includes('/')) {
+    return null;
+  }
+
+  const [seriesName] = postSlug.split('/');
+  return seriesName || null;
+}
+
+function getSeriesNameFromMetaPath(path: string): string | null {
+  if (!postRootDir) return null;
+
+  const normalizedPath = normalizePath(path);
+  const metaPathPrefix = `${postRootDir}/`;
+
+  if (!normalizedPath.startsWith(metaPathPrefix) || !normalizedPath.endsWith('/meta.json')) {
+    return null;
+  }
+
+  const relativePath = normalizedPath.slice(metaPathPrefix.length);
+  const [seriesName] = relativePath.split('/');
+  return seriesName || null;
+}
+
+function collectChangedFiles(payload: GitHubPushPayload): {
+  added: Set<string>;
+  modified: Set<string>;
+  removed: Set<string>;
+} {
+  const added = new Set<string>();
+  const modified = new Set<string>();
+  const removed = new Set<string>();
+
+  for (const commit of payload.commits ?? []) {
+    for (const path of commit.added ?? []) {
+      added.add(normalizePath(path));
+    }
+    for (const path of commit.modified ?? []) {
+      modified.add(normalizePath(path));
+    }
+    for (const path of commit.removed ?? []) {
+      removed.add(normalizePath(path));
+    }
+  }
+
+  return { added, modified, removed };
+}
 
 function isValidSignature(body: string, signature: string | null, secret: string) {
   if (!signature?.startsWith('sha256=')) return false;
@@ -54,11 +134,51 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  revalidateTag(BLOG_CACHE_TAG, 'max');
+  const changedFiles = collectChangedFiles(payload);
+  const tagsToRevalidate = new Set<string>();
+  const allChangedFiles = [...changedFiles.added, ...changedFiles.modified, ...changedFiles.removed];
+  let hasFallbackContentChange = false;
+
+  for (const changedPath of allChangedFiles) {
+    const postSlug = getPostSlugFromPath(changedPath);
+    if (postSlug) {
+      tagsToRevalidate.add(getBlogPostCacheTag(postSlug));
+    }
+
+    const seriesName = getSeriesNameFromPostPath(changedPath) ?? getSeriesNameFromMetaPath(changedPath);
+    if (seriesName) {
+      tagsToRevalidate.add(getBlogSeriesCacheTag(seriesName));
+    }
+
+    if (profilePath && changedPath === profilePath) {
+      tagsToRevalidate.add(BLOG_PROFILE_CACHE_TAG);
+    }
+
+    if (!postSlug && !seriesName && (!profilePath || changedPath !== profilePath)) {
+      hasFallbackContentChange = true;
+    }
+  }
+
+  if (changedFiles.added.size > 0 || changedFiles.removed.size > 0) {
+    tagsToRevalidate.add(BLOG_INDEX_CACHE_TAG);
+  }
+
+  if (hasFallbackContentChange) {
+    tagsToRevalidate.add(BLOG_FALLBACK_CACHE_TAG);
+  }
+
+  if (tagsToRevalidate.size === 0) {
+    tagsToRevalidate.add(BLOG_INDEX_CACHE_TAG);
+  }
+
+  for (const tag of tagsToRevalidate) {
+    revalidateTag(tag, 'max');
+  }
 
   return NextResponse.json({
     ok: true,
-    revalidatedTag: BLOG_CACHE_TAG,
+    revalidatedTags: Array.from(tagsToRevalidate),
+    changedFiles: allChangedFiles,
     branch: payload.ref ?? null,
     repository: repository ?? null,
     headCommit: payload.head_commit?.id ?? null,
