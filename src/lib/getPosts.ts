@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
+import { BLOG_CACHE_TAG, BLOG_FALLBACK_REVALIDATE_SECONDS } from './blogCache';
 import { fetchAllData, getHeaders, getNext } from './fetchingFunc';
 import { MarkdownToPlainText } from './markdownConverter';
 import { comparePosts, compareSeriesPosts } from './postSorter';
@@ -12,7 +13,7 @@ const gitContentPath = `https://api.github.com/repos/${process.env.GIT_USERNAME!
 const getPostContent = cache(async (path: string): Promise<{ data: PostData; content: string; excerpt: string }> => {
   const fileJson = await fetch(`${gitContentPath}/${path}`, {
     ...getHeaders(),
-    ...getNext(1200),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
@@ -40,7 +41,7 @@ const getPostContent = cache(async (path: string): Promise<{ data: PostData; con
 
 export const getSeriesProps = cache(async () => {
   const targetDir = process.env.GIT_POSTS_DIR!;
-  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, 1200);
+  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]);
   const seriesArray = data.filter((item) => item.type === 'dir').map((item) => item.name as string);
 
   return seriesArray;
@@ -61,7 +62,9 @@ async function createPostFromFile(item: any, dir: string): Promise<Post | null> 
 
 async function createPostsFromDirectory(item: any): Promise<Post[]> {
   const dirPath = `${process.env.GIT_POSTS_DIR}/${item.name}`;
-  const dirContent = await fetchAllData(`${gitContentPath}/${dirPath}`, 1200);
+  const dirContent = await fetchAllData(`${gitContentPath}/${dirPath}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [
+    BLOG_CACHE_TAG,
+  ]);
 
   const markdownFiles = dirContent.filter((subItem) => subItem.type === 'file' && subItem.name.endsWith('.md'));
   const dirFiles = await Promise.all(markdownFiles.map((subItem) => createPostFromFile(subItem, dirPath)));
@@ -71,7 +74,7 @@ async function createPostsFromDirectory(item: any): Promise<Post[]> {
 
 export const getPostsProps = cache(async (dir?: string): Promise<Post[]> => {
   const targetDir = dir ? `${process.env.GIT_POSTS_DIR}/${dir}` : process.env.GIT_POSTS_DIR!;
-  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, 300);
+  const data = await fetchAllData(`${gitContentPath}/${targetDir}`, BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]);
 
   const postsPromises = data.map(async (item) => {
     if (item.type === 'file' && item.name.endsWith('.md')) {
@@ -94,7 +97,7 @@ export const getSeries = cache(async (dir: string) => {
   const targetDir = `${process.env.GIT_POSTS_DIR}/${dir}`;
   const fileJson = await fetch(`${gitContentPath}/${targetDir}/meta.json`, {
     ...getHeaders(),
-    ...getNext(1200),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
@@ -124,7 +127,7 @@ export const getPost = cache(async (path: string) => {
 export const getImage = cache(async (path: string) => {
   const fileJson = await fetch(`${gitContentPath}${path}`, {
     ...getHeaders(),
-    ...getNext(3600 * 24 * 30),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));
@@ -133,7 +136,7 @@ export const getImage = cache(async (path: string) => {
 
   const imageJson = await fetch(fileJson.git_url, {
     ...getHeaders(),
-    ...getNext(3600 * 24),
+    ...getNext(BLOG_FALLBACK_REVALIDATE_SECONDS, [BLOG_CACHE_TAG]),
   })
     .then((res) => res.json())
     .catch((err) => console.error(err));

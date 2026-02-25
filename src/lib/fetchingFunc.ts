@@ -1,5 +1,5 @@
 export type FetchOptions = RequestInit & {
-  next?: { revalidate: number };
+  next?: { revalidate: number; tags?: string[] };
 };
 
 export function getHeaders() {
@@ -11,22 +11,22 @@ export function getHeaders() {
   };
 }
 
-export function getNext(revalidate: number): FetchOptions {
+export function getNext(revalidate: number, tags?: string[]): FetchOptions {
   if (revalidate === 0) {
     return { cache: 'no-store' };
   } else {
-    return { next: { revalidate } };
+    return tags && tags.length > 0 ? { next: { revalidate, tags } } : { next: { revalidate } };
   }
 }
 
-export async function fetchAllData(url: string, revalidate: number): Promise<any[]> {
+export async function fetchAllData(url: string, revalidate: number, tags?: string[]): Promise<any[]> {
   let results: any[] = [];
   let nextUrl: string | null = url;
 
   while (nextUrl) {
     const response: Response = await fetch(nextUrl, {
       ...getHeaders(),
-      ...getNext(revalidate),
+      ...getNext(revalidate, tags),
     });
 
     const data = await response.json();
