@@ -8,4 +8,4 @@ export const author = {
 export const lastModified = '2024-08-07T09:00:00.000Z';
 export const enableShowGitHubProfile = true;
 export const enableShowXProfile = true;
-export const headerMovName = 'header_mov-MrNHsFnSntZobtbksg9Ow7IaYfCCoE.mp4';
+export const headerMovPath = '/header_mov.mp4'; // /public以下のパス

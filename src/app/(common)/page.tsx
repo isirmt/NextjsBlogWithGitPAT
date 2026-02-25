@@ -12,7 +12,7 @@ import PostPaging from '@/components/post/PostPaging';
 import FavoriteTags from '@/components/tag/FavoriteTags';
 import { generateMetadataTemplate } from '@/lib/SEO';
 import { getPostsProps } from '@/lib/getPosts';
-import { siteName } from '@/static/constant';
+import { headerMovPath, siteName } from '@/static/constant';
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataTemplate({
@@ -44,7 +44,7 @@ export default async function Blogs() {
       </Side>
       <SectionNoP>
         <div className='pointer-events-none m-0 aspect-[10_/_3] w-full overflow-hidden bg-[#0e4589] p-0'>
-          <video src='/header_mov.mp4' autoPlay loop muted playsInline />
+          <video src={headerMovPath} autoPlay loop muted playsInline />
         </div>
         <div className='px-8 pb-8 pt-3'>
           <Title>{siteName}</Title>
