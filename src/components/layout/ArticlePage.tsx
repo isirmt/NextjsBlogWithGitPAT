@@ -19,9 +19,11 @@ export default async function Article({ data, content, slug }: { data: PostData;
 
   return (
     <article className='relative mx-auto w-full overflow-hidden rounded-3xl bg-white transition-colors dark:bg-slate-800 md:w-[34rem] lg:w-[44rem] xl:m-0'>
-      <div className='pointer-events-none relative flex h-[calc(100vw_*_9_/_16_*_0.75)] w-full select-none items-center justify-center overflow-hidden md:h-[calc(34rem_*_9_/_16_*_0.6)] lg:h-[calc(44rem_*_9_/_16_*_0.5)]'>
-        <Image alt={data.title} width={1200} height={630} src={`/api/ogp-posts/${slug}`} />
-      </div>
+      {slug && (
+        <div className='relative flex h-[calc(100vw_*_9_/_16_*_0.75)] w-full select-none items-center justify-center overflow-hidden md:h-[calc(34rem_*_9_/_16_*_0.6)] lg:h-[calc(44rem_*_9_/_16_*_0.5)]'>
+          <Image loading='lazy' alt={data.title} width={1200} height={630} src={`/api/ogp-posts/${slug}`} />
+        </div>
+      )}
       <div className='w-full p-8'>
         <div className='mb-2 flex flex-col justify-start md:flex-row md:items-center'>
           <DateCard date={data.date} />
