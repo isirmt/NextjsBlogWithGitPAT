@@ -84,7 +84,7 @@ export default function PostIndex({ content, title }: { content: string; title: 
       <li className='relative w-full list-none before:pointer-events-none before:absolute before:bottom-0 before:left-[14px] before:top-0 before:w-px before:bg-slate-300 first:before:top-1/2 last:before:bottom-1/2 dark:before:bg-slate-600'>
         <span
           aria-hidden
-          className={`${isH3 ? 'left-2.5 size-2' : 'left-2 size-3'} absolute top-1/2 z-20 -translate-y-1/2 rounded-full border transition-all duration-200 ${
+          className={`${isH3 ? 'left-2.5 size-2' : 'left-2 size-3'} pointer-events-none absolute top-1/2 z-20 -translate-y-1/2 rounded-full border transition-all duration-200 ${
             isActive
               ? 'border-blue-500 bg-blue-500 dark:border-blue-400 dark:bg-blue-400'
               : 'border-slate-300 bg-slate-300 dark:border-slate-500 dark:bg-slate-700'
