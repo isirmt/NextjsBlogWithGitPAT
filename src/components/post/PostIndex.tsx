@@ -81,7 +81,7 @@ export default function PostIndex({ content, title }: { content: string; title: 
     const isActive = activeId === id;
 
     return (
-      <li className='relative w-full list-none'>
+      <li className='relative w-full list-none before:pointer-events-none before:absolute before:bottom-0 before:left-[14px] before:top-0 before:w-px before:bg-slate-300 first:before:top-1/2 last:before:bottom-1/2 dark:before:bg-slate-600'>
         <span
           aria-hidden
           className={`${isH3 ? 'left-2.5 size-2' : 'left-2 size-3'} absolute top-1/2 z-20 -translate-y-1/2 rounded-full border transition-all duration-200 ${
@@ -136,7 +136,7 @@ export default function PostIndex({ content, title }: { content: string; title: 
         目次
       </button>
       <ol
-        className={`${isOpen ? '' : 'hidden'} absolute right-0 top-16 max-h-[calc(100vh_-_14rem)] w-[80vw] overflow-y-auto rounded-md border border-slate-400 bg-slate-100 p-4 drop-shadow-xl transition-colors before:pointer-events-none before:absolute before:bottom-6 before:left-[29px] before:top-0 before:z-10 before:w-px before:bg-slate-300 dark:bg-slate-700 dark:before:bg-slate-600 md:relative md:top-0 md:block md:h-auto md:max-h-[calc(100vh_-_14rem)] md:w-full md:rounded-none md:border-none md:bg-gray-100 md:pl-2 md:pt-2 md:drop-shadow-none before:md:left-[21px] dark:md:bg-slate-900`}
+        className={`${isOpen ? '' : 'hidden'} absolute right-0 top-16 max-h-[calc(100vh_-_14rem)] w-[80vw] overflow-y-auto rounded-md border border-slate-400 bg-slate-100 p-4 drop-shadow-xl transition-colors dark:bg-slate-700 md:relative md:top-0 md:block md:h-auto md:max-h-[calc(100vh_-_14rem)] md:w-full md:rounded-none md:border-none md:bg-gray-100 md:pl-2 md:pt-2 md:drop-shadow-none dark:md:bg-slate-900`}
       >
         <IndexLink id='' level={1}>
           {title}
