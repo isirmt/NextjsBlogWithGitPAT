@@ -24,7 +24,7 @@ export default function TagBanner({ tag, isSmall = false }: { tag: string; isSma
       <Link href={`/tags/${tag}`}>
         <div
           title={`「#${tag}」で検索する`}
-          className={`transition-colors ${isSmall ? 'rounded-md border px-1 text-sm' : 'rounded-s-3xl border-y border-l py-1.5 pl-4 pr-3'} group border-blue-400 hover:bg-blue-400 dark:border-violet-500 dark:hover:bg-violet-500`}
+          className={`transition-colors ${isSmall ? 'rounded-md border px-1 text-sm' : 'rounded-s-3xl border-y border-l py-1 pl-2 pr-1.5 lg:py-1.5 lg:pl-4 lg:pr-3'} group border-blue-400 hover:bg-blue-400 dark:border-violet-500 dark:hover:bg-violet-500`}
         >
           <span className='text-blue-500 transition-colors before:mr-1 before:content-["#"] group-hover:text-white dark:text-violet-500 dark:group-hover:text-slate-200'>
             {tag}
