@@ -36,11 +36,11 @@ export default function CopyToClipboard({ text }: { text: string }) {
 
   return (
     <button
-      className='flex items-center justify-center rounded-md bg-gray-200 px-3 py-1 text-sm transition-colors hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600'
+      aria-label={copied ? 'コピー完了' : 'クリップボードへコピー'}
+      className='flex items-center justify-center rounded-full bg-gray-200 p-2.5 text-lg transition-colors hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600'
       onClick={copy}
     >
-      <span className={`${copied ? 'i-tabler-clipboard-check' : 'i-tabler-clipboard'} mr-1`} /> コピー
-      {copied ? '完了' : 'する'}
+      <span className={`${copied ? 'i-tabler-clipboard-check' : 'i-tabler-clipboard'}`} />
     </button>
   );
 }

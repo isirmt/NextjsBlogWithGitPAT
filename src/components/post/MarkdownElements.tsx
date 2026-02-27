@@ -156,13 +156,22 @@ async function AwaitingPre({
 
   return (
     <div className='post_codeblock w-full'>
-      {fileName && (
+      {(fileName || language !== '') && (
         <div className='post_fname'>
-          <span>{fileName}</span>
+          <span className='flex items-center'>
+            <span className='i-tabler-file mr-1' />
+            {fileName ?? '<無題>'}
+          </span>
+          {language !== '' && (
+            <React.Fragment>
+              <span className='h-4 border-l border-slate-200' />
+              <span className='post_lang'>{language}</span>
+            </React.Fragment>
+          )}
         </div>
       )}
       <div className='post_shiki' dangerouslySetInnerHTML={{ __html: highlightedCode }} />
-      <div className='sticky bottom-2 flex'>
+      <div className='sticky bottom-2 mt-4 flex w-full justify-center'>
         <CopyToClipboard text={normalizedCode} />
       </div>
     </div>

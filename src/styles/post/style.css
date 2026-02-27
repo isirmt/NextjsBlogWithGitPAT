@@ -97,7 +97,11 @@
 }
 
 .markdown .post_fname {
-  @apply inline-block rounded-t-lg bg-slate-800 px-2 py-0.5 text-white transition-colors dark:bg-slate-700 dark:text-slate-400;
+  @apply flex h-6 w-full items-center justify-center gap-2 rounded-t-lg bg-slate-600 px-2 py-0.5 text-center leading-none text-white transition-colors dark:bg-slate-700 dark:text-slate-400;
+}
+
+.markdown .post_lang {
+  @apply dark:border-slate-700;
 }
 
 .markdown pre {
@@ -109,7 +113,7 @@
 }
 
 .post_fname + .post_shiki pre {
-  @apply rounded-lg rounded-tl-none;
+  @apply rounded-lg rounded-t-none;
 }
 
 .markdown pre > code {
