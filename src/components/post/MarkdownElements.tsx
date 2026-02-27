@@ -106,26 +106,43 @@ async function ExA({ path, isInner }: { path: string; isInner: boolean }) {
   );
 }
 
-const H2 = ({
-  node,
-  ...props
-}: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
+function getNodeText(children: React.ReactNode): string {
+  if (typeof children === 'string' || typeof children === 'number') return String(children);
+  if (Array.isArray(children)) return children.map((child) => getNodeText(child)).join('');
+  if (React.isValidElement(children)) {
+    const childProps = children.props as { children?: React.ReactNode };
+    return getNodeText(childProps.children);
+  }
+  return '';
+}
+
+function toHeadingId(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[`*_~]/g, '')
+    .replace(/[!"$%&'()*+,./:;<=>?@[\\\]^_{|}]/g, '')
+    .replace(/\s+/g, '-');
+}
+
+function getHeadingId(children: React.ReactNode) {
+  return toHeadingId(getNodeText(children));
+}
+
+const H2 = ({ ...props }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
     <div
       className='mb-4 mt-3 border-b-2 border-blue-200 text-blue-700 transition-colors dark:border-slate-700 dark:text-white'
-      id={node!.position?.start.line.toString()}
+      id={getHeadingId(props.children)}
     >
       <h2 {...props}>{props.children}</h2>
     </div>
   );
 };
 
-const H3 = ({
-  node,
-  ...props
-}: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
+const H3 = ({ ...props }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
   return (
-    <h3 {...props} className='transition-colors dark:text-white' id={node!.position?.start.line.toString()}>
+    <h3 {...props} className='transition-colors dark:text-white' id={getHeadingId(props.children)}>
       {props.children}
     </h3>
   );
@@ -202,14 +219,15 @@ const A = ({
   ...props
 }: ClassAttributes<HTMLAnchorElement> &
   HTMLAttributes<HTMLAnchorElement> & { href?: string; children?: React.ReactNode }) => {
-  const isInternalLink = href?.startsWith('/') || href?.startsWith('#');
+  const isHashLink = href?.startsWith('#') ?? false;
+  const isInternalLink = href?.startsWith('/') || isHashLink;
   const displayText = typeof children === 'string' ? children : '';
 
-  if (href && displayText === href) {
+  if (href && !isHashLink && displayText === href) {
     return <ExA path={href} isInner={isInternalLink ?? false} />;
   }
 
-  return isInternalLink ? (
+  return isHashLink || isInternalLink ? (
     <a className='post_hyper_url' href={href} {...props}>
       {children}
     </a>

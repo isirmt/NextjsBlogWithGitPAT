@@ -1,15 +1,34 @@
 'use client';
+import * as React from 'react';
 import { useState } from 'react';
 import type { ClassAttributes, HTMLAttributes } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeSanitize from 'rehype-sanitize';
 import type { ExtraProps } from 'react-markdown';
 
+function getNodeText(children: React.ReactNode): string {
+  if (typeof children === 'string' || typeof children === 'number') return String(children);
+  if (Array.isArray(children)) return children.map((child) => getNodeText(child)).join('');
+  if (React.isValidElement(children)) {
+    const childProps = children.props as { children?: React.ReactNode };
+    return getNodeText(childProps.children);
+  }
+  return '';
+}
+
+function toHeadingId(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[`*_~]/g, '')
+    .replace(/[!"$%&'()*+,./:;<=>?@[\\\]^_{|}]/g, '')
+    .replace(/\s+/g, '-');
+}
+
 export default function PostIndex({ content, title }: { content: string; title: string }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const anchorLinkH2 = ({
-    node,
     ...props
   }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
     return (
@@ -17,7 +36,7 @@ export default function PostIndex({ content, title }: { content: string; title: 
         <a
           className='inline-block w-full rounded-md p-0.5 pl-2 transition-colors hover:bg-slate-200 dark:hover:bg-slate-600 md:hover:bg-gray-200 dark:md:hover:bg-slate-800'
           onClick={() => setIsOpen(false)}
-          href={'#' + node!.position?.start.line.toString()}
+          href={`#${toHeadingId(getNodeText(props.children))}`}
         >
           {props.children}
         </a>
@@ -26,7 +45,6 @@ export default function PostIndex({ content, title }: { content: string; title: 
   };
 
   const anchorLinkH3 = ({
-    node,
     ...props
   }: ClassAttributes<HTMLHeadingElement> & HTMLAttributes<HTMLHeadingElement> & ExtraProps) => {
     return (
@@ -34,7 +52,7 @@ export default function PostIndex({ content, title }: { content: string; title: 
         <a
           className='inline-block w-full rounded-md p-0.5 pl-4 transition-colors hover:bg-slate-200 dark:hover:bg-slate-600 md:hover:bg-gray-200 dark:md:hover:bg-slate-800'
           onClick={() => setIsOpen(false)}
-          href={'#' + node!.position?.start.line.toString()}
+          href={`#${toHeadingId(getNodeText(props.children))}`}
         >
           {props.children}
         </a>
