@@ -1,18 +1,13 @@
-import { cacheLife, cacheTag } from 'next/cache';
 import Rss from 'rss';
-import { BLOG_INDEX_CACHE_TAG } from '@/lib/blogCache';
 import { getPostsProps } from '@/lib/getPosts';
 import { siteName } from '@/static/constant';
 import { lastModified } from '@/static/constant';
 
 const baseURL = process.env.NEXT_PUBLIC_URL!;
-const feedRevalidateSeconds = 1200;
+export const dynamic = 'force-static';
+export const revalidate = false;
 
 async function getFeedXml() {
-  'use cache';
-  cacheLife({ revalidate: feedRevalidateSeconds });
-  cacheTag(BLOG_INDEX_CACHE_TAG);
-
   const feed = new Rss({
     title: `${siteName}の新着投稿`,
     description: `「${siteName}」の投稿フィード`,
@@ -42,7 +37,7 @@ export async function GET() {
     status: 200,
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': `s-maxage=${feedRevalidateSeconds}, stale-while-revalidate`,
+      'Cache-Control': 'public, max-age=31536000, immutable',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
     },

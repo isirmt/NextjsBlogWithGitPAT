@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import React from 'react';
 import { Metadata } from 'next';
 import TipsCard from '@/components/TipsCard';
@@ -7,16 +6,17 @@ import { Main, Section, Side, Title } from '@/components/layout/PageLayout';
 import FeedButton from '@/components/post/FeedButton';
 import PostPaging from '@/components/post/PostPaging';
 import { generateMetadataTemplate } from '@/lib/SEO';
-import { getSeries } from '@/lib/getPosts';
+import { getSeries, getSeriesProps } from '@/lib/getPosts';
 import { siteName } from '@/static/constant';
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const revalidate = false;
+export const dynamicParams = false;
 
-const getContents = cache(async (slug: string) => {
-  return getSeries(slug);
-});
+const getContents = async (slug: string) => getSeries(slug);
+
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  return (await getSeriesProps()).map((slug) => ({ slug }));
+}
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;

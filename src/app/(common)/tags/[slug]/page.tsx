@@ -7,11 +7,15 @@ import PostPaging from '@/components/post/PostPaging';
 import SubscribeTagButton from '@/components/tag/SubscribeTagButton';
 import { generateMetadataTemplate } from '@/lib/SEO';
 import { getPostsProps } from '@/lib/getPosts';
+import { getTags } from '@/lib/postSorter';
 import { siteName } from '@/static/constant';
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
+export const revalidate = false;
+export const dynamicParams = false;
+
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  return getTags(await getPostsProps()).map((slug) => ({ slug }));
+}
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;

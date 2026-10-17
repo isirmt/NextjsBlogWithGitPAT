@@ -11,22 +11,22 @@ export function getHeaders() {
   };
 }
 
-export function getNext(revalidate: number, tags?: string[]): FetchOptions {
+export function getNext(revalidate: number): FetchOptions {
   if (revalidate === 0) {
     return { cache: 'no-store' };
-  } else {
-    return tags && tags.length > 0 ? { next: { revalidate, tags } } : { next: { revalidate } };
   }
+
+  return { cache: 'force-cache' };
 }
 
-export async function fetchAllData(url: string, revalidate: number, tags?: string[]): Promise<any[]> {
+export async function fetchAllData(url: string, revalidate: number): Promise<any[]> {
   let results: any[] = [];
   let nextUrl: string | null = url;
 
   while (nextUrl) {
     const response: Response = await fetch(nextUrl, {
       ...getHeaders(),
-      ...getNext(revalidate, tags),
+      ...getNext(revalidate),
     });
 
     const data = await response.json();

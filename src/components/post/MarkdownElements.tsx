@@ -78,7 +78,7 @@ async function ExA({ path, isInner }: { path: string; isInner: boolean }) {
   let meta: HeadMeta | null = null;
   try {
     const metaResponse = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/get-head?url=${encodeURIComponent(path)}`, {
-      next: { revalidate: 3600 * 24 },
+      cache: 'force-cache',
     });
     const bodyText = await metaResponse.text();
     if (!metaResponse.ok) {
